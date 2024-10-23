@@ -18,15 +18,28 @@
 a {
     color: var(--default-font-color);
     text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover{
+    color: var(--border-color);
 }
 
 .btn {
     background-color: var(--button-color);
-    border-color: var(--border-color);
-    padding: .7rem;
+    border: 1.5px solid var(--border-color);
     border-radius: .7rem;
-    width: 7rem;
+    padding: .7rem .9rem;
     font-size: 1rem;
     font-weight: 700;
     letter-spacing: .05rem;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background-color: var(--border-color);
+}
+
+ul {
+    list-style: none;
 }

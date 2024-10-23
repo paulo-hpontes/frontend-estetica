@@ -6,12 +6,12 @@ const Home = () => {
   return (
     <main>
       <section id="home" className='container'>
-        <div>
+        <div className='title'>
           <h1>Deseja se sentir mais bonita?</h1>
-          <p>Realce sua beleza de forma natural</p>
-          <button>Agendar</button>
+          <p>Realce sua beleza <br/> de forma natural</p>
+          <button className='btn'>Agendar</button>
         </div>
-        <div>
+        <div className='img'>
           <img src={homeIMG} alt="Imagem de apresentação" />
         </div>
       </section>

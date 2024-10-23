@@ -4,7 +4,6 @@ import homeIMG from "../../assets/Home.png";
 
 const Home = () => {
   return (
-    <main>
       <section id="home" className='container'>
         <div className='title'>
           <h1>Deseja se sentir mais bonita?</h1>
@@ -15,7 +14,6 @@ const Home = () => {
           <img src={homeIMG} alt="Imagem de apresentação" />
         </div>
       </section>
-    </main>
   );
 };
 

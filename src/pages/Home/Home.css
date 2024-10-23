@@ -1,0 +1,7 @@
+#home{     
+    background: radial-gradient(#FFFF, var(--main-bg-color));
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}

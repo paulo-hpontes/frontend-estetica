@@ -13,3 +13,8 @@
    --default-font-color: #FFF;
 
 }
+
+a {
+    color: var(--default-font-color);
+    text-decoration: none;
+}

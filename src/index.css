@@ -4,6 +4,7 @@
     outline: none;
     box-sizing: border-box;
     font-family: "Roboto", sans-serif;
+    color: var(--default-font-color);
 }
 
 :root {
@@ -12,4 +13,20 @@
    --border-color: #C52E56;
    --default-font-color: #FFF;
 
+}
+
+a {
+    color: var(--default-font-color);
+    text-decoration: none;
+}
+
+.btn {
+    background-color: var(--button-color);
+    border-color: var(--border-color);
+    padding: .7rem;
+    border-radius: .7rem;
+    width: 7rem;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: .05rem;
 }

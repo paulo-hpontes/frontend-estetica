@@ -1,6 +1,6 @@
 import "./Navbar.css";
 
-import Logo from "../../assets/Logo.png";
+import Logo from '../../../public/Logo.png'
 
 // React Hooks
 import { Link, NavLink } from "react-router-dom";

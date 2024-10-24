@@ -41,9 +41,7 @@ const Register = () => {
   return (
     <section id="login" className="container">
       <div className="form">
-        <h1>    
-          Faça login para <br /> entrar com sua conta
-        </h1>
+        <h1>Cadastre-se</h1>
         <form onSubmit={handleSubmit}>
           {error && <Message msg={error} type="error" />}
           <input
@@ -82,7 +80,7 @@ const Register = () => {
           )}
         </form>
         <p>
-          Já possui uma conta? <Link to="/login">Clique aqui</Link>
+          Já possui uma conta?<br/> <Link to="/login">Clique aqui</Link>
         </p>
       </div>
     </section>

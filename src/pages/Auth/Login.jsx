@@ -38,7 +38,7 @@ const Login = () => {
     <section id="login" className="container">
       <div className="form">
         <h1>
-          Faça login para <br/> entrar com sua conta
+          Login
         </h1>
         <form onSubmit={handleSubmit}>
         {error && <Message msg={error} type='error' />}
@@ -58,7 +58,7 @@ const Login = () => {
           {loading && <button type="submit" className="btn" disabled>Aguarde...</button>}
         </form>
         <p>
-          Não tem uma conta? <Link to="/register">Clique aqui</Link>
+          Não tem uma conta?<br/> <Link to="/register" className="subtitle">Clique aqui</Link>
         </p>
       </div>
     </section>

@@ -56,9 +56,10 @@ form {
 
 input {
     color: var(--secundary-font-color);
+    width: 13rem;
     border: .1rem solid var(--border-color);
     border-radius: .2rem;
-    padding: 1rem .8rem;
+    padding: 1rem .6rem;
     margin-bottom: .6rem;
 }
 
@@ -67,5 +68,5 @@ input::placeholder {
 }
 
 input:focus {
-    box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
+    box-shadow: 0 0 0.5rem 0.2rem var(--border-color);
 }

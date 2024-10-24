@@ -1,4 +1,4 @@
-export const api = 'http://localhost:8008/api';
+export const api = 'http://localhost:8086/api';
 
 export const requestConfig = (method, data, token = null) => {
     let config;

@@ -1,0 +1,25 @@
+#register,
+#login {
+    background-image: url('../../assets/Home-bg.jpg');   
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.form {
+    box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
+    padding: 2rem 4rem;
+}
+
+.form h1{
+    margin-bottom: 1.5rem;
+}
+
+.form form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}

@@ -1,0 +1,18 @@
+.message {
+    border-radius: .5rem;
+    padding: .5rem 1rem;
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: .1rem solid var(--border-color);
+    background-color: var(--button-color);
+}
+
+.message.error {
+    background-color: #ea071e;
+}
+
+.message.success {
+    background-color: #155724;
+}

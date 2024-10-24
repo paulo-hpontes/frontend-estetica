@@ -5,6 +5,7 @@
     box-sizing: border-box;
     font-family: "Roboto", sans-serif;
     color: var(--default-font-color);
+    transition: all 400ms;
 }
 
 :root {
@@ -12,7 +13,9 @@
    --button-color: #FF396E;
    --border-color: #C52E56;
    --default-font-color: #FFF;
-
+   --secundary-font-color: #000;
+   --error-msg-color: #721C24;
+   --success-msg-color: #155724;
 }
 
 a {
@@ -28,6 +31,7 @@ a:hover{
 .btn {
     background-color: var(--button-color);
     border: 1.5px solid var(--border-color);
+    max-width: 7rem;
     border-radius: .7rem;
     padding: .7rem .9rem;
     font-size: 1rem;
@@ -42,4 +46,26 @@ a:hover{
 
 ul {
     list-style: none;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input {
+    color: var(--secundary-font-color);
+    border: .1rem solid var(--border-color);
+    border-radius: .2rem;
+    padding: 1rem .8rem;
+    margin-bottom: .6rem;
+}
+
+input::placeholder {
+    color: #969696;
+}
+
+input:focus {
+    box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
 }

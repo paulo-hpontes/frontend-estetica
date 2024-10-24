@@ -5,6 +5,7 @@
     box-sizing: border-box;
     font-family: "Roboto", sans-serif;
     color: var(--default-font-color);
+    transition: all 400ms;
 }
 
 :root {
@@ -63,4 +64,8 @@ input {
 
 input::placeholder {
     color: #969696;
+}
+
+input:focus {
+    box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
 }

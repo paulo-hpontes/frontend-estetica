@@ -13,6 +13,7 @@ import Footer from './components/Footer/Footer';
 // Pages
 import Home from './pages/Home/Home';
 import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
 
 function App() {
   const {auth, loading} = useAuth();
@@ -27,6 +28,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home/>} />
             <Route path="/login"  element={!auth ? <Login /> : <Navigate to='/'/>} />
+            <Route path="/register"  element={!auth ? <Register /> : <Navigate to='/'/>} />
           </Routes>
         <Footer />
       </BrowserRouter>

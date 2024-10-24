@@ -39,7 +39,7 @@ const Navbar = () => {
           <li>
             <NavLink to={"/services"}>Serviços</NavLink>
           </li>
-          {auth ? (
+          {user ? (
             <li>
               <NavLink to={"/scheduling"}>Meus Agendamentos</NavLink>
             </li>

@@ -1,5 +1,5 @@
 #home{     
-    background-image: url('../../assets/Home-bg.jpg');   
+    background-image: url('../../assets/Img-Home/Home-bg.jpg');   
     background-position: center;
     background-size: cover;
     display: flex;
@@ -12,7 +12,7 @@
     align-items: center;
     max-width: 50%;
     font-weight:bold;
-    padding: 0 0 0 5rem;
+    padding: 0 10rem 0 0;
 }
 
 .title h1{

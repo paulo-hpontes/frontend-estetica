@@ -11,18 +11,6 @@
     height: 8rem;
 }
 
-.links {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: .5rem;
-}
-.nav-links {
-    display: flex;
-    font-size: 1.2rem;
-    margin: 1rem;
-}
-
-.nav-links li {
-    margin: 1rem;
+#nav .btn {
+    margin-right: 1rem;
 }

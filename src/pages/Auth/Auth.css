@@ -10,6 +10,7 @@
 }
 
 .form {
+    background-color: rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
     padding: 2rem 4rem;
 }

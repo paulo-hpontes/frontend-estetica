@@ -4,7 +4,6 @@
     outline: none;
     box-sizing: border-box;
     font-family: "Roboto", sans-serif;
-    color: var(--default-font-color);
     transition: all 400ms;
 }
 
@@ -16,6 +15,7 @@
    --secundary-font-color: #000;
    --error-msg-color: #721C24;
    --success-msg-color: #155724;
+   --test-color: #EBBBD0;
 }
 
 a {
@@ -31,6 +31,7 @@ a:hover{
 .btn {
     background-color: var(--button-color);
     border: 1.5px solid var(--border-color);
+    color: var(--default-font-color);
     max-width: 7rem;
     border-radius: .7rem;
     padding: .7rem .9rem;

@@ -14,6 +14,7 @@ import Footer from './components/Footer/Footer';
 import Home from './pages/Home/Home';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
+import Service from './pages/Service/Service';
 
 function App() {
   const {auth, loading} = useAuth();
@@ -27,6 +28,7 @@ function App() {
         <Navbar />
           <Routes>
             <Route path='/' element={<Home/>} />
+            <Route path='/services' element={<Service/>} />
             <Route path="/login"  element={!auth ? <Login /> : <Navigate to='/'/>} />
             <Route path="/register"  element={!auth ? <Register /> : <Navigate to='/'/>} />
           </Routes>

@@ -1,22 +1,25 @@
 #register,
 #login {
-  background-image: url("../../assets/Img-Home/Home-bg.jpg");
+  background-image: url("../../assets/texture-bg.jpg");
   background-position: center;
   background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  color: var(--default-font-color);
 }
 
-.form {
+#register,
+#login .form {
   background: rgba(0, 0, 0, 0.5);
   background: linear-gradient(to bottom left, #fff, var(--border-color));
   box-shadow: -0.5rem 0.5rem 0.5rem 0.3rem var(--border-color);
   padding: 2rem 4rem;
 }
 
-.form h1 {
+#register,
+#login .form h1 {
   font-size: 2rem;
   margin-bottom: 3rem;
   -webkit-text-stroke: 1px;
@@ -25,7 +28,8 @@
   font-weight: bolder;
 }
 
-.form form {
+#register,
+#login form {
   display: flex;
   flex-direction: column;
   margin-bottom: 2.5rem;

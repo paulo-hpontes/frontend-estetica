@@ -1,7 +1,5 @@
 import "./Navbar.css";
 
-import Logo from '../../../public/Logo.png'
-
 // React Hooks
 import { Link, NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -30,7 +28,7 @@ const Navbar = () => {
     <nav id="nav">
       <div className="logo">
         <Link to={"/"}>
-          <img src={Logo} alt="logo do site Lash Designer" title="Logo" />
+          <img src="Logo.png" alt="logo do site Lash Designer" title="Logo" />
         </Link>
       </div>
       {auth ? (

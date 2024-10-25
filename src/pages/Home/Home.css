@@ -1,11 +1,12 @@
 #home {
-  background-image: url("../../assets/Img-Home/Home-bg.jpg");
+  background-image: url("../../assets/texture-bg.jpg");
   background-position: center;
   background-size: cover;
   display: flex;
   text-align: center;
+  color: var(--default-font-color);
 }
-.title {
+#home .title {
   display: flex;
   align-items: center;
   align-items: flex-start;
@@ -14,14 +15,14 @@
   padding: 0 0rem 0 0;
 }
 
-.title h1 {
+#home .title h1 {
   font-size: 5rem;
   margin-bottom: 1rem;
   -webkit-text-stroke: 1px;
   -webkit-text-fill-color: var(--main-bg-color);
   text-shadow: .25rem .15rem var(--main-bg-color);}
 
-.title p {
+#home .title p {
   font-family: "Playwrite US Trad", serif;
   font-size: 2rem;
   font-weight: bold;
@@ -36,7 +37,7 @@
   margin-bottom: 1rem;
 }
 
-.title .layout {
+#home .title .layout {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,7 +48,7 @@
   border-radius: 0 0 50% 50%;
 }
 
-.layout span {
+#home .layout span {
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 2px var(--border-color);
   text-shadow: none;

@@ -1,5 +1,6 @@
 #footer {
     background-color: var(--main-bg-color);
+    color: var(--default-font-color);
     height: 2rem;
     display: flex;
     justify-content: center;

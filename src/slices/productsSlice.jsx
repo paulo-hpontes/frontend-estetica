@@ -10,7 +10,7 @@ const initialState = {
   message: null,
 };
 
-export const getAllServices = createAsyncThunk(
+export const getAllProducts = createAsyncThunk(
   "products/getAll",
   async (_, thunkAPI) => {
     const data = await productsService.getAllServices();
@@ -22,61 +22,103 @@ export const getAllServices = createAsyncThunk(
 );
 
 export const newProduct = createAsyncThunk(
-    "photo/publish",
-    async (serviceData, thunkAPI) => {
-      const token = thunkAPI.getState().auth.user.token;
-      const data = await productsService.newProduct(serviceData, token);
-  
-      if (data.errors) {
-        return thunkAPI.rejectWithValue(data.errors[0]);
-      }
-  
-      return data;
+  "product/publish",
+  async (serviceData, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await productsService.newProduct(serviceData, token);
+
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
     }
-  );
+
+    return data;
+  }
+);
+
+export const deleteProduct = createAsyncThunk(
+  "product/delete",
+  async (id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await productsService.deleteService(id, token);
+
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  }
+);
 
 export const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    resetMessage: (state) => {
+    reset: (state) => {
+      state.loading = false;
+      state.error = false;
+      state.success = false;
       state.message = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAllServices.pending, (state) => {
+      .addCase(getAllProducts.pending, (state) => {
         state.loading = true;
         state.error = false;
+        state.success = false;
       })
-      .addCase(getAllServices.fulfilled, (state, action) => {
+      .addCase(getAllProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true;
-        state.error = null;
         state.products = action.payload;
       })
-      .addCase(getAllServices.rejected, (state, action) => {
+      .addCase(getAllProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.success = false
+        state.error = true;
+        state.message = action.payload;
       })
       .addCase(newProduct.pending, (state) => {
         state.loading = true;
         state.error = false;
+        state.success = false;
       })
       .addCase(newProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.error = null;
-        state.product = action.payload;
-        state.message = "Serviço adicionado com sucesso!";
+        state.error = false;
+        state.product = action.payload.data;
+        state.products.push(state.product);
+        state.message = action.payload.message;
       })
       .addCase(newProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.success = false
+        state.error = true;
         state.product = {};
+        state.message = action.payload;
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.success = false;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = false;
+        state.products = state.products.filter((prod) => {
+          return prod._id !== action.payload.service._id;
+        });
+        state.message = action.payload.message;
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.success = false;
+        state.message = action.payload;
       });
   },
 });
 
-export const { resetMessage } = productsSlice.actions;
+export const { reset } = productsSlice.actions;
 export default productsSlice.reducer;

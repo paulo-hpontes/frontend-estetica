@@ -11,7 +11,7 @@ const Message = ({msg, type}) => {
 };
 
 Message.propTypes = {
-    msg: PropTypes.string.isRequired,
+    msg: PropTypes.array.isRequired,
     type: PropTypes.string.isRequired,
 }
 

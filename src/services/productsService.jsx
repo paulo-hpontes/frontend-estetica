@@ -28,9 +28,23 @@ const newProduct = async (data, token) => {
     }
   };
 
+  const deleteService = async (id, token) => {
+    const config = requestConfig("DELETE", null, token);
+    try {
+      const res = await fetch(`${api}/services/${id}`, config)
+        .then((res) => res.json())
+        .catch((err) => err);
+  
+      return res;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
 const productsService = {
     getAllServices,
-    newProduct
+    newProduct,
+    deleteService
 }
 
 export default productsService;

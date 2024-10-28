@@ -6,7 +6,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: .1rem solid var(--border-color);
 }
 
 .message.error {

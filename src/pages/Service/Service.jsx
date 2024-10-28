@@ -12,14 +12,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
 // Redux
-import { newProduct, getAllServices, resetMessage } from "../../slices/productsSlice";
+import {
+  newProduct,
+  getAllProducts,
+  deleteProduct,
+  reset,
+} from "../../slices/productsSlice";
 
 const Service = () => {
   const { user } = useSelector((state) => state.auth);
-  const { products, loading, error } = useSelector((state) => state.product);
+  const { products, loading, error, success, message } = useSelector(
+    (state) => state.product
+  );
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [errors, setErrors] = useState("");
 
   const [productType, setProductType] = useState("");
   const [productName, setProductName] = useState("");
@@ -27,53 +33,41 @@ const Service = () => {
 
   const dispatch = useDispatch();
 
+  const resetMessage = () => {
+    setTimeout(() => {
+      dispatch(reset());
+    }, 3000);
+  }
+
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
-
-  const validateForm = (data) => {
-    const errosTemp = {};
-
-    if (!data.serviceType){
-      errosTemp.type = "Tipo do serviço é obrigatório";
-    } 
-      
-    if (!data.serviceName){
-      errosTemp.type = "Tipo do serviço é obrigatório";
-    }
-    if (!data.serviceValue || data.productValue === 0){
-      errosTemp.value = "Valor do serviço é obrigatório";
-    }
-
-    setErrors(errosTemp);
-  };
-
   const handleSelectChange = (e) => setProductType(e.target.value);
 
-  const handleSubmit = async ()=> {
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const data = {
       serviceType: productType,
       serviceName: productName,
-      serviceValue: productValue
+      serviceValue: productValue,
     };
-
-    validateForm(data);
-    if (errors) return;
 
     await dispatch(newProduct(data));
 
-    setProductType('');
-    setProductName('');
-    setProductValue(0);
+    setProductType("");
+    setProductName("");
+    setProductValue();
+    setModalOpen(false);
 
-    setTimeout(() => {
-      dispatch(resetMessage());
-    }, 3000)
+    resetMessage();
   };
   
+  const handleDeleteService = async (id) => {
+    await dispatch(deleteProduct(id));
+    resetMessage();
+  };
 
   useEffect(() => {
-    dispatch(getAllServices());
+    dispatch(getAllProducts());
   }, [dispatch]);
 
   if (loading) {
@@ -85,59 +79,91 @@ const Service = () => {
       <div className="title">
         <h2>Serviços</h2>
       </div>
+      {success && (
+        <small>
+          <Message msg={message} type="success" />
+        </small>
+      )}
+      {error && (
+        <small>
+          <Message msg={message} type="error" />
+        </small>
+      )}
       <div className="container-services">
         <div className="services-content">
           <h3>CÍLIOS</h3>
           {products &&
             products.map((product) => (
-              <>
+              <span key={product._id}>
                 {product.serviceType === "cilios" ? (
-                  <div key={product._id}>
+                  <div>
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
-                    {user && user.admin && <FaTrashAlt />}
+                    {user && user.admin && (
+                      <button
+                        className="btn"
+                        onClick={() => handleDeleteService(product._id)}
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <></>
                 )}
-              </>
+              </span>
             ))}
         </div>
         <div className="services-content">
           <h3>SOBRANCELHAS</h3>
           {products &&
             products.map((product) => (
-              <>
+              <span key={product._id}>
                 {product.serviceType === "Sobrancelhas" ? (
                   <div key={product._id}>
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
-                    {user && user.admin && <FaTrashAlt />}
+                    {user && user.admin && (
+                      <button
+                        className="btn"
+                        onClick={() => handleDeleteService(product._id)}
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <></>
                 )}
-              </>
+              </span>
             ))}
         </div>
         <div className="services-content">
           <h3>DEPILAÇÃO</h3>
           {products &&
             products.map((product) => (
-              <>
+              <span key={product._id}>
                 {product.serviceType === "Depilacao" ? (
                   <div key={product._id}>
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
-                    {user && user.admin && <FaTrashAlt />}
+                    {user && user.admin && (
+                      <button
+                        className="btn"
+                        onClick={() => handleDeleteService(product._id)}
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <></>
                 )}
-              </>
+              </span>
             ))}
         </div>
       </div>
+
       {user && user.admin && (
         <>
           <button className="btn open-modal" onClick={handleOpenModal}>
@@ -150,24 +176,23 @@ const Service = () => {
           >
             <h3>ADICIONE NOVO SERVIÇO</h3>
             <small>{error && <Message msg={error} type="error" />}</small>
-            <form className="form">
-              {errors.type && (
+            <form className="form" onSubmit={handleSubmit}>
+              {error && (
                 <small>
-                  <Message msg={errors.type} type="error" />
+                  <Message msg={error.message} type="error" />
                 </small>
               )}
-              <select value={productType} onChange={handleSelectChange}>
+              <select
+                value={productType}
+                onChange={handleSelectChange}
+                required
+              >
                 <option value="">Selecione uma opção</option>
                 <option value="cilios">Cílios</option>
                 <option value="Sobrancelhas">Sobranchelhas</option>
                 <option value="Depilacao">Depilação</option>
               </select>
 
-              {errors.titulo && (
-                <small>
-                  <Message msg={errors.titulo} type="error" />
-                </small>
-              )}
               <label>
                 <span>Título do serviço:</span>
                 <input
@@ -175,32 +200,24 @@ const Service = () => {
                   placeholder="Serviço"
                   onChange={(e) => setProductName(e.target.value)}
                   value={productName}
+                  required
                 />
               </label>
 
-              {errors.value && (
-                <small>
-                  <Message msg={errors.value} type="error" />
-                </small>
-              )}
               <label>
                 <span>Valor do serviço:</span>
                 <input
                   type="number"
                   onChange={(e) => setProductValue(e.target.value)}
-                  value={productValue}
+                  required
                 />
               </label>
               {!loading && (
-                <button type="submit" className="btn" onClick={handleSubmit}>
+                <button type="submit" className="btn">
                   Adicionar
                 </button>
               )}
-              {loading && (
-                <button type="submit" disabled>
-                  Aguarde...
-                </button>
-              )}
+              {loading && <button disabled>Aguarde...</button>}
             </form>
           </Modal>
         </>

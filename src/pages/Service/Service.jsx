@@ -61,7 +61,7 @@ const Service = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const data = {
       serviceType: productType,
       serviceName: productName,
@@ -78,15 +78,14 @@ const Service = () => {
     resetMessage();
   };
 
-  const handleEditSubmit = async(e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
 
     const data = {
       serviceName: editProductName,
       serviceValue: editProductValue,
-      id: editId
+      id: editId,
     };
-
 
     await dispatch(updateProduct(data));
 
@@ -96,7 +95,7 @@ const Service = () => {
     setModalEditOpen(false);
 
     resetMessage();
-  }
+  };
 
   const handleDeleteService = async (id) => {
     await dispatch(deleteProduct(id));
@@ -137,7 +136,7 @@ const Service = () => {
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
                     {user && user.admin && (
-                      <>
+                      <div>
                         <button
                           className="btn"
                           onClick={() => handleDeleteService(product._id)}
@@ -145,10 +144,13 @@ const Service = () => {
                           <FaTrashAlt />
                         </button>
 
-                        <button className="btn" onClick={() => handleOpenEditModal(product)}>
+                        <button
+                          className="btn"
+                          onClick={() => handleOpenEditModal(product)}
+                        >
                           <FaEdit />
                         </button>
-                      </>
+                      </div>
                     )}
                   </div>
                 ) : (
@@ -167,18 +169,21 @@ const Service = () => {
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
                     {user && user.admin && (
-                      <>
-                      <button
-                        className="btn"
-                        onClick={() => handleDeleteService(product._id)}
-                      >
-                        <FaTrashAlt />
-                      </button>
+                      <div>
+                        <button
+                          className="btn"
+                          onClick={() => handleDeleteService(product._id)}
+                        >
+                          <FaTrashAlt />
+                        </button>
 
-                      <button className="btn" onClick={() => handleOpenEditModal(product)}>
-                        <FaEdit />
-                      </button>
-                    </>
+                        <button
+                          className="btn"
+                          onClick={() => handleOpenEditModal(product)}
+                        >
+                          <FaEdit />
+                        </button>
+                      </div>
                     )}
                   </div>
                 ) : (
@@ -197,18 +202,21 @@ const Service = () => {
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
                     {user && user.admin && (
-                      <>
-                      <button
-                        className="btn"
-                        onClick={() => handleDeleteService(product._id)}
-                      >
-                        <FaTrashAlt />
-                      </button>
+                      <div>
+                        <button
+                          className="btn"
+                          onClick={() => handleDeleteService(product._id)}
+                        >
+                          <FaTrashAlt />
+                        </button>
 
-                      <button className="btn" onClick={() => handleOpenEditModal(product)}>
-                        <FaEdit />
-                      </button>
-                    </>
+                        <button
+                          className="btn"
+                          onClick={() => handleOpenEditModal(product)}
+                        >
+                          <FaEdit />
+                        </button>
+                      </div>
                     )}
                   </div>
                 ) : (

@@ -94,7 +94,7 @@ export const productsSlice = createSlice({
         state.loading = false;
         state.success = false;
         state.error = true;
-        state.message = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(newProduct.pending, (state) => {
         state.loading = true;
@@ -114,7 +114,7 @@ export const productsSlice = createSlice({
         state.success = false;
         state.error = true;
         state.product = {};
-        state.message = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(deleteProduct.pending, (state) => {
         state.loading = true;
@@ -134,7 +134,7 @@ export const productsSlice = createSlice({
         state.loading = false;
         state.error = true;
         state.success = false;
-        state.message = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(updateProduct.pending, (state) => {
         state.loading = true;

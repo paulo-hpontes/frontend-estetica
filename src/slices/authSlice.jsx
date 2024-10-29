@@ -57,41 +57,37 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(logout.fulfilled, (state) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.user = null;
-      })
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = false;
+        state.success = false;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.error = null;
+        state.error = false;
         state.user = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-        state.success = null;
+        state.error = action.payload.message;
+        state.success = false;
       })
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = false;
+        state.success = false;
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.error = null;
+        state.error = false;
         state.user = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-        state.success = null;
+        state.error = action.payload.message;
+        state.success = false;
       });
   },
 });

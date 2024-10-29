@@ -1,6 +1,6 @@
 import "./Service.css";
 import { IoAddCircle } from "react-icons/io5";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
 // Components
 import Modal from "../../components/Modal/Modal";
@@ -16,6 +16,7 @@ import {
   newProduct,
   getAllProducts,
   deleteProduct,
+  updateProduct,
   reset,
 } from "../../slices/productsSlice";
 
@@ -55,7 +56,7 @@ const Service = () => {
 
     setProductType("");
     setProductName("");
-    setProductValue();
+    setProductValue(0);
     setModalOpen(false);
 
     resetMessage();
@@ -64,6 +65,15 @@ const Service = () => {
   const handleDeleteService = async (id) => {
     await dispatch(deleteProduct(id));
     resetMessage();
+  };
+
+  const handleUpadateService = async (prod) => {
+    setProductType(prod.serviceType);
+    setProductName(prod.serviceName);
+    setProductValue(prod.serviceValue);
+
+    setModalOpen(true);
+    // resetMessage();
   };
 
   useEffect(() => {
@@ -96,16 +106,24 @@ const Service = () => {
             products.map((product) => (
               <span key={product._id}>
                 {product.serviceType === "cilios" ? (
-                  <div>
+                  <div className="services-details">
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
                     {user && user.admin && (
-                      <button
-                        className="btn"
-                        onClick={() => handleDeleteService(product._id)}
-                      >
-                        <FaTrashAlt />
-                      </button>
+                      <>
+                        <button
+                          className="btn"
+                          onClick={() => handleDeleteService(product._id)}
+                        >
+                          <FaTrashAlt />
+                        </button>
+                        <button
+                          className="btn"
+                          onClick={() => handleUpadateService(product)}
+                        >
+                          <FaEdit />
+                        </button>
+                      </>
                     )}
                   </div>
                 ) : (
@@ -120,7 +138,7 @@ const Service = () => {
             products.map((product) => (
               <span key={product._id}>
                 {product.serviceType === "Sobrancelhas" ? (
-                  <div key={product._id}>
+                  <div className="services-details">
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
                     {user && user.admin && (
@@ -144,7 +162,7 @@ const Service = () => {
             products.map((product) => (
               <span key={product._id}>
                 {product.serviceType === "Depilacao" ? (
-                  <div key={product._id}>
+                  <div className="services-details">
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
                     {user && user.admin && (

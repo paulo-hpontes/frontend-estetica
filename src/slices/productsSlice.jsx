@@ -49,6 +49,25 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
+export const updateProduct = createAsyncThunk(
+  "product/update",
+  async (productData, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const dataService = {serviceName: productData.serviceName, serviceValue: productData.serviceValue}
+    const data = await productsService.updateService(
+      dataService,
+      productData.id,
+      token
+    );
+
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  }
+);
+
 export const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -73,7 +92,7 @@ export const productsSlice = createSlice({
       })
       .addCase(getAllProducts.rejected, (state, action) => {
         state.loading = false;
-        state.success = false
+        state.success = false;
         state.error = true;
         state.message = action.payload;
       })
@@ -92,7 +111,7 @@ export const productsSlice = createSlice({
       })
       .addCase(newProduct.rejected, (state, action) => {
         state.loading = false;
-        state.success = false
+        state.success = false;
         state.error = true;
         state.product = {};
         state.message = action.payload;
@@ -116,6 +135,32 @@ export const productsSlice = createSlice({
         state.error = true;
         state.success = false;
         state.message = action.payload;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.success = false;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = false;
+        state.products.map((prod) => {
+          if (prod._id == action.payload.service._id) {
+            prod.serviceName = action.payload.service.serviceName;
+            prod.serviceValue = action.payload.service.serviceValue;
+            return; 
+          }
+          return prod;
+        });
+        state.message = action.payload.message;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = true;
+        state.product = {};
+        state.message = action.payload.message;
       });
   },
 });

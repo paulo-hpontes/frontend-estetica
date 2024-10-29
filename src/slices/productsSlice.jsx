@@ -51,11 +51,12 @@ export const deleteProduct = createAsyncThunk(
 
 export const updateProduct = createAsyncThunk(
   "product/update",
-  async (serviceData, thunkAPI) => {
+  async (productData, thunkAPI) => {
     const token = thunkAPI.getState().auth.user.token;
+    const dataService = {serviceName: productData.serviceName, serviceValue: productData.serviceValue}
     const data = await productsService.updateService(
-      serviceData,
-      serviceData._id,
+      dataService,
+      productData.id,
       token
     );
 
@@ -145,7 +146,7 @@ export const productsSlice = createSlice({
         state.success = true;
         state.error = false;
         state.products.map((prod) => {
-          if (prod._id === action.payload._id) {
+          if (prod._id == action.payload.service._id) {
             prod.serviceName = action.payload.service.serviceName;
             prod.serviceValue = action.payload.service.serviceValue;
             return; 
@@ -159,7 +160,7 @@ export const productsSlice = createSlice({
         state.success = false;
         state.error = true;
         state.product = {};
-        state.message = action.payload;
+        state.message = action.payload.message;
       });
   },
 });

@@ -26,11 +26,17 @@ const Service = () => {
     (state) => state.product
   );
 
+  //  Modal for new service
   const [modalOpen, setModalOpen] = useState(false);
-
   const [productType, setProductType] = useState("");
   const [productName, setProductName] = useState("");
   const [productValue, setProductValue] = useState(0);
+
+  // Modal for edit service
+  const [modalEditOpen, setModalEditOpen] = useState(false);
+  const [editId, setEditId] = useState("");
+  const [editProductName, setEditProductName] = useState("");
+  const [editProductValue, setEditProductValue] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -38,14 +44,24 @@ const Service = () => {
     setTimeout(() => {
       dispatch(reset());
     }, 3000);
-  }
+  };
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
   const handleSelectChange = (e) => setProductType(e.target.value);
 
+  const handleOpenEditModal = (product) => {
+    setProductType(product.serviceType);
+    setEditId(product._id);
+    setEditProductName(product.serviceName);
+    setEditProductValue(product.serviceValue);
+    setModalEditOpen(true);
+  };
+  const handleCloseEditModal = () => setModalEditOpen(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     const data = {
       serviceType: productType,
       serviceName: productName,
@@ -61,19 +77,30 @@ const Service = () => {
 
     resetMessage();
   };
-  
+
+  const handleEditSubmit = async(e) => {
+    e.preventDefault();
+
+    const data = {
+      serviceName: editProductName,
+      serviceValue: editProductValue,
+      id: editId
+    };
+
+
+    await dispatch(updateProduct(data));
+
+    setProductType("");
+    setEditProductName("");
+    setEditProductValue(0);
+    setModalEditOpen(false);
+
+    resetMessage();
+  }
+
   const handleDeleteService = async (id) => {
     await dispatch(deleteProduct(id));
     resetMessage();
-  };
-
-  const handleUpadateService = async (prod) => {
-    setProductType(prod.serviceType);
-    setProductName(prod.serviceName);
-    setProductValue(prod.serviceValue);
-
-    setModalOpen(true);
-    // resetMessage();
   };
 
   useEffect(() => {
@@ -117,10 +144,8 @@ const Service = () => {
                         >
                           <FaTrashAlt />
                         </button>
-                        <button
-                          className="btn"
-                          onClick={() => handleUpadateService(product)}
-                        >
+
+                        <button className="btn" onClick={() => handleOpenEditModal(product)}>
                           <FaEdit />
                         </button>
                       </>
@@ -142,12 +167,18 @@ const Service = () => {
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
                     {user && user.admin && (
+                      <>
                       <button
                         className="btn"
                         onClick={() => handleDeleteService(product._id)}
                       >
                         <FaTrashAlt />
                       </button>
+
+                      <button className="btn" onClick={() => handleOpenEditModal(product)}>
+                        <FaEdit />
+                      </button>
+                    </>
                     )}
                   </div>
                 ) : (
@@ -166,12 +197,18 @@ const Service = () => {
                     <p>{product.serviceName.toUpperCase()}</p>
                     <p>R$: {product.serviceValue}</p>
                     {user && user.admin && (
+                      <>
                       <button
                         className="btn"
                         onClick={() => handleDeleteService(product._id)}
                       >
                         <FaTrashAlt />
                       </button>
+
+                      <button className="btn" onClick={() => handleOpenEditModal(product)}>
+                        <FaEdit />
+                      </button>
+                    </>
                     )}
                   </div>
                 ) : (
@@ -226,6 +263,7 @@ const Service = () => {
                 <span>Valor do serviço:</span>
                 <input
                   type="number"
+                  placeholder="Valor R$"
                   onChange={(e) => setProductValue(e.target.value)}
                   required
                 />
@@ -233,6 +271,56 @@ const Service = () => {
               {!loading && (
                 <button type="submit" className="btn">
                   Adicionar
+                </button>
+              )}
+              {loading && <button disabled>Aguarde...</button>}
+            </form>
+          </Modal>
+
+          {/* Edit Modal */}
+          <Modal
+            isOpen={modalEditOpen}
+            onClose={handleCloseEditModal}
+            onSubmit={handleEditSubmit}
+          >
+            <h3>EDITE SEU SERVIÇO</h3>
+            <form className="form" onSubmit={handleEditSubmit}>
+              {error && (
+                <small>
+                  <Message msg={error.message} type="error" />
+                </small>
+              )}
+              <select value={productType} disabled required>
+                <option value="">Selecione uma opção</option>
+                <option value="cilios">Cílios</option>
+                <option value="Sobrancelhas">Sobranchelhas</option>
+                <option value="Depilacao">Depilação</option>
+              </select>
+
+              <label>
+                <span>Título do serviço:</span>
+                <input
+                  type="text"
+                  placeholder="Serviço"
+                  onChange={(e) => setEditProductName(e.target.value)}
+                  value={editProductName}
+                  required
+                />
+              </label>
+
+              <label>
+                <span>Valor do serviço:</span>
+                <input
+                  type="number"
+                  placeholder="Valor R$"
+                  onChange={(e) => setEditProductValue(e.target.value)}
+                  value={editProductValue}
+                  required
+                />
+              </label>
+              {!loading && (
+                <button type="submit" className="btn">
+                  Atualizar
                 </button>
               )}
               {loading && <button disabled>Aguarde...</button>}

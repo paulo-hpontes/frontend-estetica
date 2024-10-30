@@ -1,0 +1,84 @@
+#scheduling {
+    color: var(--default-font-color);
+    display: flex;
+    justify-content: right;
+    flex-direction: column;
+}
+
+#scheduling .title {
+  background: linear-gradient(
+    to top left,
+    var(--border-color),
+    var(--main-bg-color)
+  );
+  box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 40%;
+  height: 5rem;
+  margin: 1.5rem 0 3rem auto;
+  border-radius: 1rem 0 0 1rem;
+}
+
+#scheduling .title h2 {
+  padding: 1rem;
+}
+
+#scheduling .scheduling-content{
+  display: flex;
+  align-items:start;
+  width: 100%;
+  height: 30rem;
+}
+
+#scheduling .calendar{
+  color: #000;
+  width: 50%;
+  height: 100%;
+  margin-left: 1rem;
+}
+
+#scheduling .scheduling-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 50%;
+}
+
+#scheduling .form label, input {
+  width: 100%;
+}
+
+#scheduling .rbc-events-container .rbc-event,
+#scheduling .rbc-row-segment .rbc-event {
+  background-color: var(--main-bg-color);
+  border: var(--border-color);
+}
+
+#scheduling .rbc-toolbar {
+  color: var(--default-font-color);
+  background-color: var(--main-bg-color);
+}
+
+#scheduling .rbc-btn-group button {
+  cursor: pointer;
+  color: var(--default-font-color);
+  border-color: var(--border-color);
+}
+
+#scheduling .rbc-btn-group button:hover {
+  background-color: var(--border-color);
+}
+
+#scheduling .rbc-btn-group button:focus,
+#scheduling .rbc-btn-group button:active {
+  background-color: var(--border-color);
+}
+
+
+#scheduling .rbc-btn-group .rbc-active {
+  background-color: var(--border-color);
+}
+

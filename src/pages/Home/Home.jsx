@@ -2,6 +2,7 @@
 import './Home.css';
 import homeIMG from "../../assets/Img-Home/Home.png";
 import Service from '../Service/Service';
+import Scheduling from '../Scheduling/Scheduling';
 
 const Home = () => {
   return (
@@ -20,6 +21,7 @@ const Home = () => {
           </div>
         </section>
         <Service/>
+        <Scheduling />
       </>
   );
 };

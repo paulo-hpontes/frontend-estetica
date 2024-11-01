@@ -2,7 +2,9 @@
     color: var(--default-font-color);
     display: flex;
     justify-content: right;
+    align-items: center;
     flex-direction: column;
+    text-align: center;
 }
 
 #scheduling .title {
@@ -39,14 +41,6 @@
   margin-left: 1rem;
 }
 
-#scheduling .scheduling-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 50%;
-}
-
 #scheduling .form label, input {
   width: 100%;
 }
@@ -80,5 +74,20 @@
 
 #scheduling .rbc-btn-group .rbc-active {
   background-color: var(--border-color);
+}
+
+#scheduling .scheduling-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  width: 50%;
+}
+
+#scheduling .personal-scheduling{
+  width: 60%;
+  height: 25rem;
+  background-color: var(--main-bg-color);
 }
 

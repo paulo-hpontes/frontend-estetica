@@ -5,6 +5,7 @@
     box-sizing: border-box;
     font-family: "Roboto", sans-serif;
     transition: all 400ms;
+    scroll-behavior: smooth;
 }
 
 :root {
@@ -32,7 +33,7 @@ a:hover{
     background-color: var(--button-color);
     border: 1.5px solid var(--border-color);
     color: var(--default-font-color);
-    max-width: 7rem;
+    max-width: 8rem;
     border-radius: .7rem;
     padding: .7rem .9rem;
     font-size: 1rem;
@@ -61,7 +62,16 @@ input {
     border: .1rem solid var(--border-color);
     border-radius: .2rem;
     padding: 1rem .6rem;
-    margin-bottom: .6rem;
+    margin: .5rem;
+}
+
+select {
+    color: var(--secundary-font-color);
+    width: 13rem;
+    border: .1rem solid var(--border-color);
+    border-radius: .2rem;
+    padding: 1rem .6rem;
+    margin: .5rem;
 }
 
 input::placeholder {

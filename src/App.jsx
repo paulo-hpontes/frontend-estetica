@@ -15,6 +15,7 @@ import Home from './pages/Home/Home';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import Service from './pages/Service/Service';
+import Scheduling from './pages/Scheduling/Scheduling';
 
 function App() {
   const {auth, loading} = useAuth();
@@ -29,6 +30,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home/>} />
             <Route path='/services' element={<Service/>} />
+            <Route path="/scheduling"  element={<Scheduling/>} />
             <Route path="/login"  element={!auth ? <Login /> : <Navigate to='/'/>} />
             <Route path="/register"  element={!auth ? <Register /> : <Navigate to='/'/>} />
           </Routes>

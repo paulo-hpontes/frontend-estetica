@@ -1,4 +1,7 @@
 #services {
+  background-image: url("../../assets/texture-bg.jpg");
+  background-position: center;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,10 +20,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 15rem;
-  height: 15rem;
-  margin: -4rem 0 2rem 0;
-  border-radius: 50% 50%;
+  width: 40rem;
+  height: 7rem;
+  margin: -1rem 0 2rem 0;
+  border-radius: 2rem;
 }
 #services .title h2 {
   font-size: 3rem;
@@ -74,9 +77,6 @@
   padding-bottom: 1rem;
 }
 
-#services .form .btn {
-  margin: 0.5rem;
-}
 
 .open-modal {
   margin: 0.5rem;

@@ -2,6 +2,7 @@
 import './Home.css';
 import homeIMG from "../../assets/Img-Home/Home.png";
 import Service from '../Service/Service';
+import Scheduling from '../Scheduling/Scheduling';
 
 const Home = () => {
   return (
@@ -15,11 +16,12 @@ const Home = () => {
             <div className='layout'>
               <h1>Deseja <br/> se sentir <br/><span>mais</span> bonita?</h1>
               <p>Realce sua beleza de forma natural</p>
-              <button className='btn'>Agendar</button>
+              <a  href='#scheduling'><button className='btn'>Agendar</button></a>
             </div>
           </div>
         </section>
         <Service/>
+        <Scheduling/>
       </>
   );
 };

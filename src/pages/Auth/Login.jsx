@@ -26,7 +26,6 @@ const Login = () => {
       email,
       password
     }
-
     dispatch(login(user));
   };
 

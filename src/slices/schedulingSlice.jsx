@@ -14,7 +14,6 @@ export const newScheduling = createAsyncThunk(
   "scheduling/post",
   async (scheduling, thunkAPI) => {
     const token = thunkAPI.getState().auth.user.token;
-
     const data = await schedulingService.newScheduling(scheduling, token);
 
     if (data.errors) {
@@ -28,6 +27,18 @@ export const getAllScheduling = createAsyncThunk(
   "scheduling/getall",
   async (_, thunkAPI) => {
     const data = await schedulingService.getAllScheduling();
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+    return data;
+  }
+);
+
+export const deleteScheduling = createAsyncThunk(
+  "scheduling/delete",
+  async (id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await schedulingService.deleteScheduling(id, token);
     if (data.errors) {
       return thunkAPI.rejectWithValue(data.errors[0]);
     }
@@ -78,6 +89,28 @@ export const schedulingSlice = createSlice({
         state.schedulings = action.payload;
       })
       .addCase(getAllScheduling.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = true;
+        state.schedulings = {};
+        state.message = action.payload.message;
+      })
+      .addCase(deleteScheduling.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.success = false;
+      })
+      .addCase(deleteScheduling.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = false;
+        state.message = action.payload.message;
+        state.schedulings = state.schedulings.filter((sched) => {
+            console.log(action.payload);
+            return sched._id !== action.payload.data._id;
+        });
+      })
+      .addCase(deleteScheduling.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = true;

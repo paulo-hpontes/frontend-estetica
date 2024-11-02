@@ -1,13 +1,12 @@
 import "./Scheduling.css";
 import { IoAddCircle } from "react-icons/io5";
-// import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import { useInView } from "react-intersection-observer";
 
 // Calendar
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import momentBr from "../../utils/momentConfig";
-
 
 // React Hooks
 import { useEffect, useState, useLayoutEffect } from "react";
@@ -24,6 +23,7 @@ import { profile } from "../../slices/userSlice";
 import {
   newScheduling,
   getAllScheduling,
+  deleteScheduling,
   reset,
 } from "../../slices/schedulingSlice";
 
@@ -67,18 +67,6 @@ const Scheduling = () => {
       dispatch(reset());
     }, 3000);
   };
-  
-  // Open and Close modal
-  const handleCloseModal = () => setModalOpen(false);
-  const handleOpenModal = () => {
-    if (!userAuth) {
-      return navigate("/login");
-    }
-    if (user) setUserName(user.name);
-    setSelectedHours(hoursNow);
-    setSelectedDate(dateNow);
-    setModalOpen(true);
-  };
 
   // Set the Service Name
   const handleSelectService = (e) => setSelectedService(e.target.value);
@@ -92,6 +80,15 @@ const Scheduling = () => {
     setFilterService(filterService);
   };
 
+  // Open and Close modal
+  const handleCloseModal = () => setModalOpen(false);
+  const handleOpenModal = () => {
+    if (user) setUserName(user.name);
+    setSelectedHours(hoursNow);
+    setSelectedDate(dateNow);
+    setModalOpen(true);
+  };
+
   // Open modal by selected slot
   const handleSelectSlot = (slotInfo) => {
     const data = momentBr(slotInfo.start).format("yyyy-MM-DD");
@@ -103,9 +100,14 @@ const Scheduling = () => {
     setModalOpen(true);
   };
 
-  // Handle scheduling submit 
+  // Handle scheduling submit
   const saveScheduling = (e) => {
     e.preventDefault();
+
+    if (!userAuth) {
+      return navigate("/login");
+    }
+
     const dataStart = selectedDate + "T" + selectedHours;
 
     const data = {
@@ -129,6 +131,11 @@ const Scheduling = () => {
     resetMessage();
   };
 
+  const handleDelete = (id) => {
+    dispatch(deleteScheduling(id));
+    resetMessage();
+  };
+
   // Organizing scheduling info for the Calendar
   useEffect(() => {
     const newEvent = schedulings.map((el) => {
@@ -149,8 +156,8 @@ const Scheduling = () => {
   }, [schedulings]);
 
   useEffect(() => {
-      dispatch(profile());
-      dispatch(getAllScheduling());
+    dispatch(profile());
+    dispatch(getAllScheduling());
   }, [dispatch]);
 
   const { ref: ref1, inView } = useInView({
@@ -161,7 +168,6 @@ const Scheduling = () => {
     const animations = document.querySelectorAll(".hidden-sched");
     if (inView) {
       animations.forEach((el) => {
-        console.log(el);
         el.classList.add("show-sched");
       });
     }
@@ -196,7 +202,7 @@ const Scheduling = () => {
             endAccessor="end"
             selectable={true}
             onSelectSlot={handleSelectSlot}
-            defaultView="week"
+            defaultView="day"
             messages={{
               next: "PRÓXIMO",
               previous: "ANTERIOR",
@@ -205,6 +211,9 @@ const Scheduling = () => {
               week: "SEMANA",
               day: "DIA",
               agenda: "AGENDA",
+              date: "Data",
+              time: "Horário",
+              event: "Cliente"
             }}
           />
         </div>
@@ -218,16 +227,47 @@ const Scheduling = () => {
                   {user.email === sched.userEmail ? (
                     <div className="scheduling-details">
                       <div>
-                        <h4>{sched.service.typeService.toUpperCase()}</h4>
-                        <p>{sched.service.nameService}</p>
+                        <h4>{sched.title.toUpperCase()}</h4>
+                        <p>
+                          {sched.service.typeService}:{" "}
+                          {sched.service.nameService}
+                        </p>
                       </div>
                       <div>
                         <p>{momentBr(sched.start).format("L")}</p>
                         <p>{momentBr(sched.start).fromNow()}</p>
                       </div>
+                      <button
+                        className="btn"
+                        onClick={() => handleDelete(sched._id)}
+                      >
+                        <FaTrashAlt />
+                      </button>
                     </div>
                   ) : (
-                    <></>
+                    <>
+                      {user && user.admin && (
+                        <div className="scheduling-details">
+                          <div>
+                            <h4>{sched.title.toUpperCase()}</h4>
+                            <p>
+                              {sched.service.typeService}:{" "}
+                              {sched.service.nameService}
+                            </p>
+                          </div>
+                          <div>
+                            <p>{momentBr(sched.start).format("L")}</p>
+                            <p>{momentBr(sched.start).fromNow()}</p>
+                          </div>
+                          <button
+                            className="btn"
+                            onClick={() => handleDelete(sched._id)}
+                          >
+                            <FaTrashAlt />
+                          </button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </span>
               ))}
@@ -262,13 +302,20 @@ const Scheduling = () => {
             />
           </label>
 
-          {dateNow === selectedDate ? (
+          {dateNow >= selectedDate ? (
             <>
               {hoursNow > "19:00" || hoursNow > selectedHours ? (
                 <>
                   <label>
                     <span>Horário:</span>
-                    <input type="time" value={""} disabled />
+                    <input
+                      type="time"
+                      value={selectedHours}
+                      onChange={(e) => setSelectedHours(e.target.value)}
+                      min="08:00"
+                      max="19:00"
+                      required
+                    />
                   </label>
 
                   <select value={""} required disabled>

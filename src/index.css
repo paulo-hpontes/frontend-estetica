@@ -4,7 +4,7 @@
     outline: none;
     box-sizing: border-box;
     font-family: "Roboto", sans-serif;
-    transition: all 400ms;
+    transition: all 1s;
     scroll-behavior: smooth;
 }
 

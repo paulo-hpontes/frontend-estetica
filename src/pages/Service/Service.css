@@ -1,5 +1,5 @@
 #services {
-  background-image: url("../../assets/texture-bg.jpg");
+  background-image: url("../../assets/olga-thelavart-vR8xIbr1EtU-unsplash.jpg");
   background-position: center;
   background-size: cover;
   display: flex;
@@ -7,10 +7,10 @@
   align-items: center;
   justify-content: center;
   color: var(--default-font-color);
-  text-align: center;
+  text-align: center; 
 }
 
-#services .title {
+.title-service {
   background: linear-gradient(
     to top left,
     var(--border-color),
@@ -19,26 +19,50 @@
   box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40rem;
+  justify-content: flex-end;
+  width: 40%;
   height: 7rem;
-  margin: -1rem 0 2rem 0;
-  border-radius: 2rem;
+  margin: 0 auto 3rem 0;
+  border-radius: 0 2rem 2rem 0;
 }
-#services .title h2 {
+
+.hidden-service {
+  opacity: 0;
+  filter: blur(15px);
+  transform: translateX(100%);
+}
+
+.show-service {
+  filter: blur(0px);
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.title-service h2{
   font-size: 3rem;
+  padding: 1rem;
   -webkit-text-stroke: 1px;
   -webkit-text-fill-color: #fff;
   text-shadow: -.25rem .15rem #000;
 }
 
-#services .container-services {
+.container-services {
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
   width: 90%;
   min-height: 70dvh;
   margin: 1rem 0;
+}
+
+.container-services :nth-child(1){
+  transition-delay: 600ms;
+}
+.container-services :nth-child(2){
+  transition-delay: 800ms;
+}
+.container-services :nth-child(3){
+  transition-delay: 1s;
 }
 
 #services .services-content {
@@ -54,7 +78,7 @@
   text-align: center;
 }
 
-#services .services-content h3 {
+.services-content h3 {
   font-size: 2rem;
   -webkit-text-stroke: 1px;
   -webkit-text-fill-color: #fff;
@@ -62,7 +86,7 @@
   margin: 2rem;
 }
 
-#services .services-details {
+.services-details {
   display: flex;
   align-items: center;
   justify-content: center;

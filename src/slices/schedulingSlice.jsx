@@ -25,15 +25,15 @@ export const newScheduling = createAsyncThunk(
 );
 
 export const getAllScheduling = createAsyncThunk(
-    "scheduling/getall",
-    async (_, thunkAPI) => {
-      const data = await schedulingService.getAllScheduling();
-      if (data.errors) {
-        return thunkAPI.rejectWithValue(data.errors[0]);
-      }
-      return data;
+  "scheduling/getall",
+  async (_, thunkAPI) => {
+    const data = await schedulingService.getAllScheduling();
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
     }
-  );
+    return data;
+  }
+);
 
 export const schedulingSlice = createSlice({
   name: "scheduling",
@@ -57,8 +57,8 @@ export const schedulingSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.scheduling = action.payload.data;
-        state.schedulings.push(state.scheduling);
+        state.scheduling = action.payload.newData;
+        state.schedulings.unshift(state.scheduling);
         state.message = action.payload.message;
       })
       .addCase(newScheduling.rejected, (state, action) => {
@@ -66,7 +66,6 @@ export const schedulingSlice = createSlice({
         state.success = false;
         state.error = true;
         state.scheduling = {};
-        state.schedulings.push(state.scheduling);
         state.message = action.payload.message;
       })
       .addCase(getAllScheduling.pending, (state) => {

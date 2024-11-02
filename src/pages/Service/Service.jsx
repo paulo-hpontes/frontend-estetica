@@ -127,7 +127,7 @@ const Service = () => {
       )}
       <div className="container-services">
         <div className="services-content">
-          <h3>CÍLIOS</h3>
+          <h3>Cílios</h3>
           {products &&
             products.map((product) => (
               <span key={product._id}>
@@ -160,7 +160,7 @@ const Service = () => {
             ))}
         </div>
         <div className="services-content">
-          <h3>SOBRANCELHAS</h3>
+          <h3>Sobrancelhas</h3>
           {products &&
             products.map((product) => (
               <span key={product._id}>
@@ -193,7 +193,7 @@ const Service = () => {
             ))}
         </div>
         <div className="services-content">
-          <h3>DEPILAÇÃO</h3>
+          <h3>Depilação</h3>
           {products &&
             products.map((product) => (
               <span key={product._id}>

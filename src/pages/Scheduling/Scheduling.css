@@ -18,31 +18,31 @@
   align-items: center;
   justify-content: flex-start;
   width: 40%;
-  height: 5rem;
+  height: 7rem;
   margin: 1.5rem 0 3rem auto;
-  border-radius: 1rem 0 0 1rem;
+  border-radius: 2rem 0 0 2rem;
 }
 
 #scheduling .title h2 {
+  font-size: 3rem;
   padding: 1rem;
+  -webkit-text-stroke: 1px;
+  -webkit-text-fill-color: #fff;
+  text-shadow: -.25rem .15rem #000;
 }
 
 #scheduling .scheduling-content{
   display: flex;
   align-items:start;
   width: 100%;
-  height: 30rem;
+  min-height: 30rem;
 }
 
 #scheduling .calendar{
   color: #000;
   width: 50%;
-  height: 100%;
+  height: 30rem;
   margin-left: 1rem;
-}
-
-#scheduling .form label, input {
-  width: 100%;
 }
 
 #scheduling .rbc-events-container .rbc-event,
@@ -56,10 +56,21 @@
   background-color: var(--main-bg-color);
 }
 
-#scheduling .rbc-btn-group button {
-  cursor: pointer;
+#scheduling .rbc-day-bg {
   color: var(--default-font-color);
-  border-color: var(--border-color);
+}
+
+
+#scheduling .rbc-btn-group button {
+  background-color: var(--button-color);
+  border: 1.5px solid var(--border-color);
+  color: var(--default-font-color);
+  border-radius: .7rem;
+  padding: .5rem;
+  font-size: .7rem;
+  font-weight: 700;
+  margin: .5rem;
+  cursor: pointer;
 }
 
 #scheduling .rbc-btn-group button:hover {
@@ -86,8 +97,30 @@
 }
 
 #scheduling .personal-scheduling{
-  width: 60%;
-  height: 25rem;
+  width: 50%;
+  height: 30rem;
+  overflow-y: auto;
   background-color: var(--main-bg-color);
+  border-radius: 2rem;
+}
+
+#scheduling .personal-scheduling h3{
+  font-size: 1.6rem;
+  -webkit-text-stroke: 1px;
+  -webkit-text-fill-color: #fff;
+  text-shadow: -.25rem .15rem #000;
+  margin: 2rem;
+}
+
+#scheduling .scheduling-details{
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  width: 90%;
+  padding: .5rem;
+  background-color: var(--border-color);
+  margin: 1rem;
+  border-radius: .5rem;
+
 }
 

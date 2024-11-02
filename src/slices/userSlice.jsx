@@ -46,8 +46,11 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    resetMessage: (state) => {
-      state.message = null;
+    resetUser: (state) => {
+      state.loading = false;
+      state.error = false;
+      state.success = false;
+      state.user = null;
     },
   },
   extraReducers: (builder) => {
@@ -62,6 +65,12 @@ export const userSlice = createSlice({
         state.success = true;
         state.error = false;
         state.user = action.payload;
+      })
+      .addCase(profile.rejected, (state) => {
+        state.loading = false;
+        state.success = false;
+        state.error = true;
+        state.user = {};
       })
       .addCase(updateAdmin.pending, (state) => {
         state.loading = true;
@@ -96,5 +105,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { resetMessage } = userSlice.actions;
+export const { resetUser } = userSlice.actions;
 export default userSlice.reducer;

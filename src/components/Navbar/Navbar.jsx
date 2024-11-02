@@ -10,6 +10,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 // Redux
 import { logout, reset } from "../../slices/authSlice";
+import { resetUser } from "../../slices/userSlice";
 
 const Navbar = () => {
   const { auth } = useAuth();
@@ -20,6 +21,7 @@ const Navbar = () => {
   const handleLogout = () => {
     dispatch(logout());
     dispatch(reset());
+    dispatch(resetUser());
 
     navigate("/login");
   };
@@ -37,7 +39,7 @@ const Navbar = () => {
         </NavLink>
       ) : (
         <NavLink to={"/login"}>
-          <button className="btn" onClick={handleLogout}>Login</button>
+          <button className="btn">Login</button>
         </NavLink>
       )}
     </nav>

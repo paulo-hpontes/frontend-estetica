@@ -12,7 +12,6 @@ const Home = () => {
             <img src={homeIMG} alt="Imagem de apresentação" />
           </div>
           <div className='title'>
-            {/* <img src={TextIMG}></img> */}
             <div className='layout'>
               <h1>Deseja <br/> se sentir <br/><span>mais</span> bonita?</h1>
               <p>Realce sua beleza de forma natural</p>
@@ -21,7 +20,7 @@ const Home = () => {
           </div>
         </section>
         <Service/>
-        <Scheduling/>
+        <Scheduling/> 
       </>
   );
 };

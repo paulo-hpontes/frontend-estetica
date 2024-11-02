@@ -1,16 +1,16 @@
 import "./Scheduling.css";
 import { IoAddCircle } from "react-icons/io5";
 // import { FaTrashAlt } from "react-icons/fa";
+import { useInView } from "react-intersection-observer";
 
 // Calendar
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import momentBr from "../../utils/momentConfig";
 
-const localizer = momentLocalizer(momentBr);
 
 // React Hooks
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -37,17 +37,27 @@ const Scheduling = () => {
     (state) => state.scheduling
   );
 
+  // Store the data in the right order for the calendar
   const [events, setEvents] = useState([]);
+
+  // Modal
+  const [modalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedHours, setSelectedHours] = useState("");
   const [userName, setUserName] = useState("");
-  const [selectedService, setSelectedService] = useState([]);
-  const [filterService, setFilterService] = useState([]);
+
+  // Store the service Type
   const [service, setService] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
+
+  // Stores the name by service Type
+  const [filterService, setFilterService] = useState([]);
+
+  // Store the service name choice
+  const [selectedService, setSelectedService] = useState([]);
 
   const dateNow = momentBr().format("yyyy-MM-DD");
   const hoursNow = momentBr().format("HH:mm");
+  const localizer = momentLocalizer(momentBr);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -57,7 +67,9 @@ const Scheduling = () => {
       dispatch(reset());
     }, 3000);
   };
-
+  
+  // Open and Close modal
+  const handleCloseModal = () => setModalOpen(false);
   const handleOpenModal = () => {
     if (!userAuth) {
       return navigate("/login");
@@ -67,10 +79,11 @@ const Scheduling = () => {
     setSelectedDate(dateNow);
     setModalOpen(true);
   };
-  const handleCloseModal = () => setModalOpen(false);
-  
+
+  // Set the Service Name
   const handleSelectService = (e) => setSelectedService(e.target.value);
 
+  // Set the Service Type and the options for service name
   const handleSelectChange = (e) => {
     setService(e.target.value);
     const filterService = products.filter((prod) => {
@@ -79,6 +92,7 @@ const Scheduling = () => {
     setFilterService(filterService);
   };
 
+  // Open modal by selected slot
   const handleSelectSlot = (slotInfo) => {
     const data = momentBr(slotInfo.start).format("yyyy-MM-DD");
     const hours = momentBr(slotInfo.start).format("HH:mm");
@@ -89,6 +103,7 @@ const Scheduling = () => {
     setModalOpen(true);
   };
 
+  // Handle scheduling submit 
   const saveScheduling = (e) => {
     e.preventDefault();
     const dataStart = selectedDate + "T" + selectedHours;
@@ -114,6 +129,7 @@ const Scheduling = () => {
     resetMessage();
   };
 
+  // Organizing scheduling info for the Calendar
   useEffect(() => {
     const newEvent = schedulings.map((el) => {
       const data = {
@@ -133,13 +149,23 @@ const Scheduling = () => {
   }, [schedulings]);
 
   useEffect(() => {
-    async function Reload() {
-      await dispatch(profile());
-      await dispatch(getAllScheduling());
-    }
-
-    Reload();
+      dispatch(profile());
+      dispatch(getAllScheduling());
   }, [dispatch]);
+
+  const { ref: ref1, inView } = useInView({
+    threshold: 0.5,
+  });
+
+  useLayoutEffect(() => {
+    const animations = document.querySelectorAll(".hidden-sched");
+    if (inView) {
+      animations.forEach((el) => {
+        console.log(el);
+        el.classList.add("show-sched");
+      });
+    }
+  }, [inView]);
 
   if (loading || loadingUser || loadingProd) {
     return <Loading />;
@@ -147,7 +173,7 @@ const Scheduling = () => {
 
   return (
     <section id="scheduling" className="container">
-      <div className="title">
+      <div className="title hidden-sched" ref={ref1}>
         <h2>Agendamentos</h2>
       </div>
       {success && (
@@ -161,7 +187,7 @@ const Scheduling = () => {
         </small>
       )}
       <div className="scheduling-content">
-        <div className="calendar">
+        <div className="calendar hidden-sched">
           <Calendar
             localizer={localizer}
             culture="pt-br"
@@ -182,7 +208,7 @@ const Scheduling = () => {
             }}
           />
         </div>
-        <div className="scheduling-info">
+        <div className="scheduling-info hidden-sched">
           <div className="personal-scheduling">
             <h3>Meus Agendamentos</h3>
             {schedulings &&
@@ -236,7 +262,7 @@ const Scheduling = () => {
             />
           </label>
 
-            {dateNow === selectedDate ? (
+          {dateNow === selectedDate ? (
             <>
               {hoursNow > "19:00" || hoursNow > selectedHours ? (
                 <>

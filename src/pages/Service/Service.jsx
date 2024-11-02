@@ -1,6 +1,8 @@
+// Layout
 import "./Service.css";
 import { IoAddCircle } from "react-icons/io5";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import { useInView } from "react-intersection-observer";
 
 // Components
 import Modal from "../../components/Modal/Modal";
@@ -9,7 +11,7 @@ import Loading from "../../components/Loading/Loading";
 
 // React Hooks
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 
 // Redux
 import {
@@ -106,13 +108,27 @@ const Service = () => {
     dispatch(getAllProducts());
   }, [dispatch]);
 
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
+
+  useLayoutEffect(() => {
+    const animations = document.querySelectorAll(".hidden-service");
+    if (inView) {
+      animations.forEach((el) => {
+        console.log(el);
+        el.classList.add("show-service");
+      });
+    }
+  }, [inView]);
+
   if (loading) {
     return <Loading />;
   }
 
   return (
-    <section id="services" className="container">
-      <div className="title">
+    <section id="services" className="container" >
+      <div className="title-service hidden-service" ref={ref}>
         <h2>Serviços</h2>
       </div>
       {success && (
@@ -126,7 +142,7 @@ const Service = () => {
         </small>
       )}
       <div className="container-services">
-        <div className="services-content">
+        <div className="services-content hidden-service">
           <h3>Cílios</h3>
           {products &&
             products.map((product) => (
@@ -159,7 +175,7 @@ const Service = () => {
               </span>
             ))}
         </div>
-        <div className="services-content">
+        <div className="services-content hidden-service">
           <h3>Sobrancelhas</h3>
           {products &&
             products.map((product) => (
@@ -192,7 +208,7 @@ const Service = () => {
               </span>
             ))}
         </div>
-        <div className="services-content">
+        <div className="services-content hidden-service">
           <h3>Depilação</h3>
           {products &&
             products.map((product) => (

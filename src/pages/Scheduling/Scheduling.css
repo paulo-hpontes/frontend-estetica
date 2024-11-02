@@ -115,7 +115,7 @@
 }
 
 #scheduling .personal-scheduling {
-  width: 50%;
+  width: 60%;
   height: 30rem;
   overflow-y: auto;
   background-color: var(--main-bg-color);
@@ -133,10 +133,15 @@
 #scheduling .scheduling-details {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   text-align: left;
   width: 90%;
   padding: 0.5rem;
   background-color: var(--border-color);
   margin: 1rem;
   border-radius: 0.5rem;
+}
+
+#scheduling .scheduling-details h4 {
+  margin-bottom: .3rem;
 }

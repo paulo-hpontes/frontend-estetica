@@ -27,9 +27,24 @@ const getAllScheduling = async () => {
     }
   };
 
+const deleteScheduling = async (id, token) => {
+    const config = requestConfig("DELETE", null, token);
+  
+    try {
+      const res = await fetch(api + `/scheduling/${id}`, config)
+        .then((res) => res.json())
+        .catch((err) => console.log(err));
+  
+      return res;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
 const schedulingService = {
   newScheduling,
   getAllScheduling,
+  deleteScheduling,
 };
 
 export default schedulingService;

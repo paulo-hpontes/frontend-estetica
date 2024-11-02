@@ -116,7 +116,6 @@ const Service = () => {
     const animations = document.querySelectorAll(".hidden-service");
     if (inView) {
       animations.forEach((el) => {
-        console.log(el);
         el.classList.add("show-service");
       });
     }

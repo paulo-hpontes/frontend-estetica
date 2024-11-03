@@ -1,0 +1,126 @@
+#contact{
+    background: linear-gradient(
+        to top left,
+        var(--border-color),
+        var(--main-bg-color)
+    );    
+    color: var(--default-font-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
+}
+
+.address{
+    width: 50%;
+    height: 80dvh;
+    padding: 1rem 1.5rem;
+}
+
+.address-content{
+    margin-bottom: 4rem;
+}
+
+.address-content h3 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+}
+
+.contact-info p, 
+.contact-info a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: .7rem;
+    font-weight: bold;
+}
+.contact-info p svg,
+.contact-info a {
+    font-size: 1.8rem;
+    margin-right: .5rem;
+}
+
+
+.address-content p{
+    margin-bottom: 2rem;
+    font-weight: bold;
+}
+
+.address .title h2,
+.contact-us .title h2{
+    font-size: 4rem;
+    -webkit-text-stroke: 1px;
+    -webkit-text-fill-color: #fff;
+    text-shadow: -0.25rem 0.15rem #000;
+}
+
+.address .title hr,
+.contact-us .title hr{
+    width: 5rem;
+    height: .2rem;
+    background-color: #fff;
+    margin-bottom: 5rem;
+}
+
+.contact-us{
+    width: 50%;
+    height: 80dvh;
+    padding: 1rem 1.5rem;
+}
+
+.form-contact{
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+.form-contact label{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.form-contact label span{
+    font-weight: bold;
+    margin: 0 1rem;
+}
+
+.form-contact label input{
+    border: .2rem solid var(--border-color);
+    margin: 1rem;
+}
+
+.form-contact button{
+    margin: 1rem;
+}
+
+.form-contact :nth-child(1){
+    width: 40%;
+}
+
+.form-contact :nth-child(1) input{
+    width: 10rem;
+}
+
+.form-contact :nth-child(2){
+    width: 50%;
+}
+
+.form-contact :nth-child(2) input{
+    width: 90%;
+}
+
+.form-contact :nth-child(3){
+    width: 100%;
+}
+
+.form-contact :nth-child(3) textarea{
+    width: 85%;
+    height: 10rem;
+    border: .2rem solid var(--border-color);
+    border-radius: .2rem;
+    margin: 1rem;
+    padding: 1rem .6rem;
+}

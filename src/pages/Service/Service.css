@@ -16,7 +16,6 @@
     var(--border-color),
     var(--main-bg-color)
   );
-  box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -50,9 +49,14 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
+  background-color: #fff; 
+  box-shadow: 0 0 0.5rem 0.2rem var(--border-color);
+  padding: 2rem;
   width: 90%;
   min-height: 70dvh;
   margin: 1rem 0;
+  border-radius:2rem 2rem;
+
 }
 
 .container-services :nth-child(1){

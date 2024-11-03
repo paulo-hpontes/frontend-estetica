@@ -70,7 +70,7 @@ const Register = () => {
           />
           {!loading && (
             <button type="submit" className="btn">
-              Entrar
+              Cadastras
             </button>
           )}
           {loading && (

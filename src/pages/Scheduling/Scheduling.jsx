@@ -246,7 +246,7 @@ const Scheduling = () => {
                     </div>
                   ) : (
                     <>
-                      {user && user.admin && (
+                      {/* {user && user.admin && (
                         <div className="scheduling-details">
                           <div>
                             <h4>{sched.title.toUpperCase()}</h4>
@@ -266,7 +266,7 @@ const Scheduling = () => {
                             <FaTrashAlt />
                           </button>
                         </div>
-                      )}
+                      )} */}
                     </>
                   )}
                 </span>

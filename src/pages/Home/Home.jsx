@@ -1,8 +1,11 @@
 // CSS
 import './Home.css';
 import homeIMG from "../../assets/Img-Home/Home.png";
+
+// Pages
 import Service from '../Service/Service';
 import Scheduling from '../Scheduling/Scheduling';
+import Contact from '../Contact/Contact';
 
 const Home = () => {
   return (
@@ -21,6 +24,7 @@ const Home = () => {
         </section>
         <Service/>
         <Scheduling/> 
+        <Contact/>
       </>
   );
 };

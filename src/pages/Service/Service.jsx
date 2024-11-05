@@ -33,12 +33,14 @@ const Service = () => {
   const [productType, setProductType] = useState("");
   const [productName, setProductName] = useState("");
   const [productValue, setProductValue] = useState(0);
+  const [time, setTime] = useState(0);
 
   // Modal for edit service
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const [editId, setEditId] = useState("");
   const [editProductName, setEditProductName] = useState("");
   const [editProductValue, setEditProductValue] = useState(0);
+  const [editTime, setEditTime] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -57,6 +59,7 @@ const Service = () => {
     setEditId(product._id);
     setEditProductName(product.serviceName);
     setEditProductValue(product.serviceValue);
+    setEditTime(product.time);
     setModalEditOpen(true);
   };
   const handleCloseEditModal = () => setModalEditOpen(false);
@@ -68,6 +71,7 @@ const Service = () => {
       serviceType: productType,
       serviceName: productName,
       serviceValue: productValue,
+      time,
     };
 
     await dispatch(newProduct(data));
@@ -75,6 +79,7 @@ const Service = () => {
     setProductType("");
     setProductName("");
     setProductValue(0);
+    setTime(0);
     setModalOpen(false);
 
     resetMessage();
@@ -111,15 +116,18 @@ const Service = () => {
   const { ref, inView } = useInView({
     threshold: 0.5,
   });
+  const { ref: ref3, inView: inView3 } = useInView({
+    threshold: 0.5,
+  });
 
   useLayoutEffect(() => {
     const animations = document.querySelectorAll(".hidden-service");
-    if (inView) {
+    if (inView || inView3) {
       animations.forEach((el) => {
         el.classList.add("show-service");
       });
     }
-  }, [inView]);
+  }, [inView, inView3]);
 
   if (loading) {
     return <Loading />;
@@ -140,7 +148,7 @@ const Service = () => {
           <Message msg={message} type="error" />
         </small>
       )}
-      <div className="container-services">
+      <div className="container-services" ref={ref3}>
         <div className="services-content hidden-service">
           <h3>Cílios</h3>
           {products &&
@@ -291,6 +299,16 @@ const Service = () => {
                   required
                 />
               </label>
+              
+              <label>
+                <span>Tempo de duração (hrs):</span>
+                <input
+                  type="number"
+                  placeholder="Duração"
+                  onChange={(e) => setTime(e.target.value)}
+                  required
+                />
+              </label>
               {!loading && (
                 <button type="submit" className="btn">
                   Adicionar
@@ -338,6 +356,17 @@ const Service = () => {
                   placeholder="Valor R$"
                   onChange={(e) => setEditProductValue(e.target.value)}
                   value={editProductValue}
+                  required
+                />
+              </label>
+              
+              <label>
+                <span>Tempo de duração (horas):</span>
+                <input
+                  type="number"
+                  placeholder="Duração"
+                  onChange={(e) => setEditTime(e.target.value)}
+                  value={editTime}
                   required
                 />
               </label>

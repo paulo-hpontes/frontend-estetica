@@ -106,7 +106,6 @@ export const schedulingSlice = createSlice({
         state.error = false;
         state.message = action.payload.message;
         state.schedulings = state.schedulings.filter((sched) => {
-            console.log(action.payload);
             return sched._id !== action.payload.data._id;
         });
       })

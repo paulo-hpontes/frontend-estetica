@@ -1,7 +1,7 @@
 import "./Scheduling.css";
 import { IoAddCircle } from "react-icons/io5";
 import { FaTrashAlt } from "react-icons/fa";
-import { useInView } from "react-intersection-observer";
+// import { useInView } from "react-intersection-observer";
 
 // Calendar
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -9,7 +9,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import momentBr from "../../utils/momentConfig";
 
 // React Hooks
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -84,6 +84,9 @@ const Scheduling = () => {
   const handleCloseModal = () => setModalOpen(false);
   const handleOpenModal = () => {
     if (user) setUserName(user.name);
+    alert(
+      "Para fazer o agendamento, é necessário pagar uma porcentagem adiantada!"
+    );
     setSelectedHours(hoursNow);
     setSelectedDate(dateNow);
     setModalOpen(true);
@@ -109,11 +112,14 @@ const Scheduling = () => {
     }
 
     const dataStart = selectedDate + "T" + selectedHours;
+    const dataEnd = products.filter((prod) => {
+      if (prod.serviceName === selectedService) return prod;
+    });
 
     const data = {
       title: userName,
       start: new Date(dataStart),
-      end: momentBr(new Date(dataStart)).add(1, "hours"),
+      end: momentBr(new Date(dataStart)).add(dataEnd[0].time, "hours"),
       service: {
         type: service,
         name: selectedService,
@@ -141,14 +147,9 @@ const Scheduling = () => {
     const newEvent = schedulings.map((el) => {
       const data = {
         id: el._id,
-        title: el.title,
+        title: el.service.typeService,
         start: new Date(el.start),
         end: new Date(el.end),
-        service: {
-          type: el.typeService,
-          name: el.nameService,
-        },
-        userEmail: el.userEmail,
       };
       return data;
     });
@@ -160,18 +161,21 @@ const Scheduling = () => {
     dispatch(getAllScheduling());
   }, [dispatch]);
 
-  const { ref: ref1, inView } = useInView({
-    threshold: 0.5,
-  });
+  // const { ref: ref1, inView } = useInView({
+  //   threshold: 0.5,
+  // });
+  // const { ref: ref2, inView: inView2 } = useInView({
+  //   threshold: 0.5,
+  // });
 
-  useLayoutEffect(() => {
-    const animations = document.querySelectorAll(".hidden-sched");
-    if (inView) {
-      animations.forEach((el) => {
-        el.classList.add("show-sched");
-      });
-    }
-  }, [inView]);
+  // useLayoutEffect(() => {
+  //   const animations = document.querySelectorAll(".hidden-sched");
+  //   if (inView || inView2) {
+  //     animations.forEach((el) => {
+  //       el.classList.add("show-sched");
+  //     });
+  //   }
+  // }, [inView, inView2]);
 
   if (loading || loadingUser || loadingProd) {
     return <Loading />;
@@ -179,7 +183,7 @@ const Scheduling = () => {
 
   return (
     <section id="scheduling" className="container">
-      <div className="title hidden-sched" ref={ref1}>
+      <div className="title">
         <h2>Agendamentos</h2>
       </div>
       {success && (
@@ -193,7 +197,7 @@ const Scheduling = () => {
         </small>
       )}
       <div className="scheduling-content">
-        <div className="calendar hidden-sched">
+        <div className="calendar">
           <Calendar
             localizer={localizer}
             culture="pt-br"
@@ -203,6 +207,7 @@ const Scheduling = () => {
             selectable={true}
             onSelectSlot={handleSelectSlot}
             defaultView="day"
+            views={["day", "week", "month"]}
             messages={{
               next: "PRÓXIMO",
               previous: "ANTERIOR",
@@ -210,21 +215,17 @@ const Scheduling = () => {
               month: "MÊS",
               week: "SEMANA",
               day: "DIA",
-              agenda: "AGENDA",
-              date: "Data",
-              time: "Horário",
-              event: "Cliente"
             }}
           />
         </div>
-        <div className="scheduling-info hidden-sched">
+        <div className="scheduling-info">
           <div className="personal-scheduling">
             <h3>Meus Agendamentos</h3>
             {schedulings &&
-              user &&
               schedulings.map((sched) => (
                 <span key={sched._id}>
-                  {user.email === sched.userEmail ? (
+                  {(user && user.admin) ||
+                  (user && user.email === sched.userEmail) ? (
                     <div className="scheduling-details">
                       <div>
                         <h4>{sched.title.toUpperCase()}</h4>
@@ -246,33 +247,15 @@ const Scheduling = () => {
                     </div>
                   ) : (
                     <>
-                      {/* {user && user.admin && (
-                        <div className="scheduling-details">
-                          <div>
-                            <h4>{sched.title.toUpperCase()}</h4>
-                            <p>
-                              {sched.service.typeService}:{" "}
-                              {sched.service.nameService}
-                            </p>
-                          </div>
-                          <div>
-                            <p>{momentBr(sched.start).format("L")}</p>
-                            <p>{momentBr(sched.start).fromNow()}</p>
-                          </div>
-                          <button
-                            className="btn"
-                            onClick={() => handleDelete(sched._id)}
-                          >
-                            <FaTrashAlt />
-                          </button>
-                        </div>
-                      )} */}
                     </>
                   )}
                 </span>
               ))}
           </div>
-          <button className="btn open-modal" onClick={handleOpenModal}>
+          <button
+            className="btn open-modal"
+            onClick={handleOpenModal}
+          >
             Novo Agendamento <IoAddCircle />
           </button>
         </div>

@@ -159,3 +159,7 @@
 #scheduling .open-modal{
   margin-bottom: 3rem;
 }
+
+#scheduling .rbc-toolbar :nth-child(3) button{
+  /* display: none; */
+}

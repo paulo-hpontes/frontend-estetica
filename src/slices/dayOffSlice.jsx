@@ -105,7 +105,7 @@ export const getAllDays = createAsyncThunk(
           state.success = true;
           state.error = false;
           state.daysOff = state.daysOff.filter((day) => {
-            return day._id !== action.payload._id;
+            return day._id !== action.payload.data._id;
           });
           state.message = action.payload.message;
         })

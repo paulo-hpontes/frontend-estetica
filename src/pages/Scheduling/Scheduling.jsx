@@ -1,5 +1,5 @@
 import "./Scheduling.css";
-import { IoAddCircle } from "react-icons/io5";
+import { IoAddCircle, IoSettings } from "react-icons/io5";
 import { FaTrashAlt } from "react-icons/fa";
 // import { useInView } from "react-intersection-observer";
 
@@ -15,11 +15,18 @@ import { useNavigate } from "react-router-dom";
 
 // Components
 import Modal from "../../components/Modal/Modal";
+import ModalAlert from "../../components/ModalAlert/ModalAlert";
 import Message from "../../components/Messages/Message";
 import Loading from "../../components/Loading/Loading";
 
 // Redux
 import { profile } from "../../slices/userSlice";
+import {
+  getAllDays,
+  newDayOff,
+  deleteDayOff,
+  reset as resetDay,
+} from "../../slices/dayOffSlice";
 import {
   newScheduling,
   getAllScheduling,
@@ -28,6 +35,7 @@ import {
 } from "../../slices/schedulingSlice";
 
 const Scheduling = () => {
+  // redux-states
   const { user, loading: loadingUser } = useSelector((state) => state.user);
   const { user: userAuth } = useSelector((state) => state.auth);
   const { products, loading: loadingProd } = useSelector(
@@ -36,24 +44,32 @@ const Scheduling = () => {
   const { schedulings, loading, success, error, message } = useSelector(
     (state) => state.scheduling
   );
+  const {
+    daysOff,
+    error: errorDay,
+    success: successDay,
+    loading: loadingDay,
+    message: messageDay,
+  } = useSelector((state) => state.dayOff);
 
-  // Store the data in the right order for the calendar
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([]); // Store the data in the right order for the calendar
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedHours, setSelectedHours] = useState("");
   const [userName, setUserName] = useState("");
+  const [service, setService] = useState(""); // Store the service Type
+  const [filterService, setFilterService] = useState([]); // Stores the service's name according service Type
+  const [selectedService, setSelectedService] = useState([]); // Store the service name choice
 
-  // Store the service Type
-  const [service, setService] = useState("");
+  // Alert Modal
+  const [openAlert, setOpenAlert] = useState(false);
+  const handleCloseAlert = () => setOpenAlert(false);
 
-  // Stores the name by service Type
-  const [filterService, setFilterService] = useState([]);
-
-  // Store the service name choice
-  const [selectedService, setSelectedService] = useState([]);
+  // DaysOff Modal
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedDayOff, setSelectedDayOff] = useState("");
 
   const dateNow = momentBr().format("yyyy-MM-DD");
   const hoursNow = momentBr().format("HH:mm");
@@ -65,8 +81,51 @@ const Scheduling = () => {
   const resetMessage = () => {
     setTimeout(() => {
       dispatch(reset());
-    }, 3000);
+      dispatch(resetDay());
+    }, 6000);
   };
+
+  // ********** DaysOff Controllers ********** //
+
+  // Open and Close daysOff modal
+  const handleOpenDaysOffModal = () => setOpenModal(true);
+  const handleCloseDaysOffModal = () => setOpenModal(false);
+
+  // Days off Submit
+  const handleDaysOffSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {
+      date: new Date(momentBr(selectedDayOff)),
+    };
+
+    dispatch(newDayOff(data));
+    setSelectedDayOff("");
+    resetMessage();
+    setOpenModal(false);
+  };
+
+  // Delete DayOff
+  const handleDeleteDay = (id) => {
+    dispatch(deleteDayOff(id));
+    resetMessage();
+  };
+
+  const verifyDayOff = (selectDay) => {
+    let verify = [];
+    if (daysOff.length) {
+      verify = daysOff.filter((day) => {
+        if (momentBr(selectDay).format("l") === momentBr(day.date).format("l"))
+          return day;
+      });
+    }
+    if (verify.length) {
+      return true;
+    }
+    return false;
+  };
+
+  // ********** Scheduling Controllers ********** //
 
   // Set the Service Name
   const handleSelectService = (e) => setSelectedService(e.target.value);
@@ -84,9 +143,6 @@ const Scheduling = () => {
   const handleCloseModal = () => setModalOpen(false);
   const handleOpenModal = () => {
     if (user) setUserName(user.name);
-    alert(
-      "Para fazer o agendamento, é necessário pagar uma porcentagem adiantada!"
-    );
     setSelectedHours(hoursNow);
     setSelectedDate(dateNow);
     setModalOpen(true);
@@ -97,14 +153,20 @@ const Scheduling = () => {
     const data = momentBr(slotInfo.start).format("yyyy-MM-DD");
     const hours = momentBr(slotInfo.start).format("HH:mm");
 
+    const verify = verifyDayOff(data);
+    if (verify) {
+      setOpenAlert(true);
+      return;
+    }
+
     setSelectedDate(data);
     setSelectedHours(hours);
     if (user) setUserName(user.name);
     setModalOpen(true);
   };
 
-  // Handle scheduling submit
-  const saveScheduling = (e) => {
+  // Form scheduling
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!userAuth) {
@@ -137,6 +199,7 @@ const Scheduling = () => {
     resetMessage();
   };
 
+  // Delete Scheduling
   const handleDelete = (id) => {
     dispatch(deleteScheduling(id));
     resetMessage();
@@ -159,25 +222,10 @@ const Scheduling = () => {
   useEffect(() => {
     dispatch(profile());
     dispatch(getAllScheduling());
+    dispatch(getAllDays());
   }, [dispatch]);
 
-  // const { ref: ref1, inView } = useInView({
-  //   threshold: 0.5,
-  // });
-  // const { ref: ref2, inView: inView2 } = useInView({
-  //   threshold: 0.5,
-  // });
-
-  // useLayoutEffect(() => {
-  //   const animations = document.querySelectorAll(".hidden-sched");
-  //   if (inView || inView2) {
-  //     animations.forEach((el) => {
-  //       el.classList.add("show-sched");
-  //     });
-  //   }
-  // }, [inView, inView2]);
-
-  if (loading || loadingUser || loadingProd) {
+  if (loading || loadingUser || loadingProd || loadingDay) {
     return <Loading />;
   }
 
@@ -186,27 +234,45 @@ const Scheduling = () => {
       <div className="title">
         <h2>Agendamentos</h2>
       </div>
-      {success && (
+      {(success || successDay) && (
         <small>
-          <Message msg={message} type="success" />
+          <Message msg={message || messageDay} type="success" />
         </small>
       )}
-      {error && (
+      {(error || errorDay) && (
         <small>
-          <Message msg={message} type="error" />
+          <Message msg={message || messageDay} type="error" />
         </small>
+      )}
+
+      {daysOff.length > 0 && (
+        <div className="daysoff">
+          <h3>Dias indisponíveis para agendamento:</h3>
+          {daysOff.map((day) => (
+            <p key={day._id}>
+              {momentBr(day.date).format("L")}
+              {user && user.admin && (
+                <button
+                  className="btn"
+                  onClick={() => handleDeleteDay(day._id)}
+                >
+                  <FaTrashAlt />
+                </button>
+              )}
+            </p>
+          ))}
+        </div>
       )}
       <div className="scheduling-content">
         <div className="calendar">
           <Calendar
             localizer={localizer}
-            culture="pt-br"
             events={events}
             startAccessor="start"
             endAccessor="end"
             selectable={true}
             onSelectSlot={handleSelectSlot}
-            defaultView="day"
+            defaultView="month"
             views={["day", "week", "month"]}
             messages={{
               next: "PRÓXIMO",
@@ -246,29 +312,61 @@ const Scheduling = () => {
                       </button>
                     </div>
                   ) : (
-                    <>
-                    </>
+                    <></>
                   )}
                 </span>
               ))}
           </div>
-          <button
-            className="btn open-modal"
-            onClick={handleOpenModal}
-          >
-            Novo Agendamento <IoAddCircle />
-          </button>
+          <div>
+            <button className="btn open-modal" onClick={handleOpenModal}>
+              Novo Agendamento <IoAddCircle />
+            </button>
+            {user && user.admin && (
+              <button
+                className="btn open-modal"
+                onClick={handleOpenDaysOffModal}
+              >
+                <IoSettings />
+              </button>
+            )}
+          </div>
         </div>
       </div>
+
+      <ModalAlert isOpen={openAlert} onClose={handleCloseAlert}>
+        <p>O dia selecionado não está disponível</p>
+      </ModalAlert>
+
+      <Modal isOpen={openModal} onClose={handleCloseDaysOffModal}>
+        <h3 className="title-modal">SELECIONE O DIA</h3>
+        <form onSubmit={handleDaysOffSubmit}>
+          <p className="describe">
+            O dia selecionado ficará indisponível para agendamento
+          </p>
+          <label>
+            <span>Data:</span>
+            <input
+              type="date"
+              value={selectedDayOff}
+              onChange={(e) => setSelectedDayOff(e.target.value)}
+              min={dateNow}
+              required
+            />
+          </label>
+          <button type="submit" className="btn">
+            Adicionar
+          </button>
+        </form>
+      </Modal>
 
       <Modal
         isOpen={modalOpen}
         onClose={handleCloseModal}
-        onSubmit={saveScheduling}
+        onSubmit={handleSubmit}
       >
-        <h3>NOVO AGENDAMENTO</h3>
+        <h3 className="title-modal">NOVO AGENDAMENTO</h3>
 
-        <form className="form" onSubmit={saveScheduling}>
+        <form className="form" onSubmit={handleSubmit}>
           <label>
             <span>Cliente: </span>
             <input type="text" value={userName} required disabled />

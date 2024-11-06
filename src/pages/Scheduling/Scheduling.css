@@ -1,5 +1,5 @@
 #scheduling {
-  background-image: url("../../assets/olga-thelavart-vR8xIbr1EtU-unsplash.jpg");
+  background-image: url("../../assets/texture-bg.jpg");
   background-position: center;
   background-size: cover;
   color: var(--default-font-color);
@@ -62,6 +62,7 @@
 
 #scheduling .calendar {
   color: #000;
+  background-color: #eee; 
   box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
   width: 50%;
   height: 30rem;
@@ -72,6 +73,10 @@
 #scheduling .rbc-row-segment .rbc-event {
   background-color: var(--main-bg-color);
   border: var(--border-color);
+}
+
+#scheduling .rbc-row-bg{
+  cursor: pointer;
 }
 
 #scheduling .rbc-toolbar {
@@ -104,11 +109,11 @@
   background-color: var(--border-color);
 }
 
-#scheduling .rbc-btn-group .rbc-active {
+.rbc-btn-group .rbc-active {
   background-color: var(--border-color);
 }
 
-#scheduling .scheduling-info {
+.scheduling-info {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -117,7 +122,7 @@
   width: 50%;
 }
 
-#scheduling .personal-scheduling {
+.personal-scheduling {
   width: 60%;
   height: 30rem;
   overflow-y: auto;
@@ -132,7 +137,7 @@
   border-radius: 2rem;
 }
 
-#scheduling .personal-scheduling h3 {
+.personal-scheduling h3 {
   font-size: 1.6rem;
   -webkit-text-stroke: 1px;
   -webkit-text-fill-color: #fff;
@@ -140,7 +145,7 @@
   margin: 2rem;
 }
 
-#scheduling .scheduling-details {
+.scheduling-details {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -152,7 +157,7 @@
   border-radius: 0.5rem;
 }
 
-#scheduling .scheduling-details h4 {
+.scheduling-details h4 {
   margin-bottom: .3rem;
 }
 
@@ -160,6 +165,34 @@
   margin-bottom: 3rem;
 }
 
-#scheduling .rbc-toolbar :nth-child(3) button{
-  /* display: none; */
+.daysoff {
+  margin: 2rem auto 2rem 1rem;
+  min-height: 3rem;
+  background: linear-gradient(
+    to top left,
+    var(--border-color),
+    var(--main-bg-color)
+  );  
+  box-shadow: 0 0 0.5rem 0.2rem var(--border-color);  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .5rem;
+}
+
+.daysoff h3{
+  margin: 1rem;
+}
+
+.daysoff p {
+  background-color: var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: .5rem;
+  padding: .5rem 1rem;
+  border-radius: .5rem;
+}
+
+.daysoff p button{
+  margin-left: .5rem;
 }

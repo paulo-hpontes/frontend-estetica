@@ -47,7 +47,7 @@ const Service = () => {
   const resetMessage = () => {
     setTimeout(() => {
       dispatch(reset());
-    }, 3000);
+    }, 6000);
   };
 
   const handleOpenModal = () => setModalOpen(true);

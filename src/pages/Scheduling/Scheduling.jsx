@@ -65,6 +65,7 @@ const Scheduling = () => {
 
   // Alert Modal
   const [openAlert, setOpenAlert] = useState(false);
+  const [messageAlert, setMessageAlert] = useState("");
   const handleCloseAlert = () => setOpenAlert(false);
 
   // DaysOff Modal
@@ -139,9 +140,19 @@ const Scheduling = () => {
     setFilterService(filterService);
   };
 
+  const schedulingAlert = (msg) => {
+    setMessageAlert(msg);
+    setOpenAlert(true);
+  };
+
   // Open and Close modal
   const handleCloseModal = () => setModalOpen(false);
   const handleOpenModal = () => {
+    schedulingAlert(
+      "Para realizarmos o agendamento, " +
+        "é necessário pagar 10% ou " +
+        "o valor completo relacionado ao serviço desejado"
+    );
     if (user) setUserName(user.name);
     setSelectedHours(hoursNow);
     setSelectedDate(dateNow);
@@ -151,14 +162,29 @@ const Scheduling = () => {
   // Open modal by selected slot
   const handleSelectSlot = (slotInfo) => {
     const data = momentBr(slotInfo.start).format("yyyy-MM-DD");
+    const dia = momentBr(slotInfo.start).format("dddd");
     const hours = momentBr(slotInfo.start).format("HH:mm");
 
-    const verify = verifyDayOff(data);
-    if (verify) {
-      setOpenAlert(true);
+    if (dia === "Domingo" || dia === "Segunda-Feira") {
+      schedulingAlert("Não abrimos aos Domingos e Segundas");
       return;
     }
 
+    if (data < dateNow) {
+      schedulingAlert("Dia Indisponível");
+      return;
+    }
+
+    const verify = verifyDayOff(data);
+    if (verify) {
+      schedulingAlert("Dia Indisponível");
+      return;
+    }
+    schedulingAlert(
+      "Para realizarmos o agendamento, " +
+        "é necessário pagar 10% ou " +
+        "o valor completo relacionado ao serviço desejado"
+    );
     setSelectedDate(data);
     setSelectedHours(hours);
     if (user) setUserName(user.name);
@@ -171,6 +197,17 @@ const Scheduling = () => {
 
     if (!userAuth) {
       return navigate("/login");
+    }
+
+    const verify = verifyDayOff(selectedDate);
+    if (verify) {
+      setOpenAlert(true);
+      return;
+    }
+
+    if (selectedDate === dateNow && selectedHours <= hoursNow) {
+      schedulingAlert("Horário indisponível");
+      return;
     }
 
     const dataStart = selectedDate + "T" + selectedHours;
@@ -210,7 +247,6 @@ const Scheduling = () => {
     const newEvent = schedulings.map((el) => {
       const data = {
         id: el._id,
-        title: el.service.typeService,
         start: new Date(el.start),
         end: new Date(el.end),
       };
@@ -334,7 +370,8 @@ const Scheduling = () => {
       </div>
 
       <ModalAlert isOpen={openAlert} onClose={handleCloseAlert}>
-        <p>O dia selecionado não está disponível</p>
+        <h3 className="title-modal">LEMBRETE</h3>
+        <p>{messageAlert}</p>
       </ModalAlert>
 
       <Modal isOpen={openModal} onClose={handleCloseDaysOffModal}>

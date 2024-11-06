@@ -6,7 +6,7 @@ const ModalAlert = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div id="alert" className="modal-overlay">
       <div className="modal-alert">
         <div className="alert-content">{children}</div>
         <button className="btn close-menu" onClick={onClose}>

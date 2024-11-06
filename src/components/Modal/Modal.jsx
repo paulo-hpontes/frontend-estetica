@@ -8,7 +8,7 @@ const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div id="modalForm" className="modal-overlay">
       <div className="modal-content">
         <div>
           <button className="btn close-menu" onClick={onClose}>

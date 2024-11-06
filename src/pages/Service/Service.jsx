@@ -260,7 +260,7 @@ const Service = () => {
             onClose={handleCloseModal}
             onSubmit={handleSubmit}
           >
-            <h3>ADICIONE NOVO SERVIÇO</h3>
+            <h3 className="title-modal">NOVO SERVIÇO</h3>
             <small>{error && <Message msg={error} type="error" />}</small>
             <form className="form" onSubmit={handleSubmit}>
               {error && (
@@ -324,7 +324,7 @@ const Service = () => {
             onClose={handleCloseEditModal}
             onSubmit={handleEditSubmit}
           >
-            <h3>EDITE SEU SERVIÇO</h3>
+            <h3 className="title-modal">EDITE SEU SERVIÇO</h3>
             <form className="form" onSubmit={handleEditSubmit}>
               {error && (
                 <small>

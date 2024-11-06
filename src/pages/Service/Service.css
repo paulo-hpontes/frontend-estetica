@@ -1,5 +1,5 @@
 #services {
-  background-image: url("../../assets/olga-thelavart-vR8xIbr1EtU-unsplash.jpg");
+  background-image: url("../../assets/texture-bg.jpg");
   background-position: center;
   background-size: cover;
   display: flex;
@@ -19,10 +19,18 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 40%;
+  width: 50%;
   height: 7rem;
   margin: 0 auto 3rem 0;
+  padding: 1rem;
   border-radius: 0 2rem 2rem 0;
+}
+
+.title-service h2{
+  font-size: 3rem;
+  -webkit-text-stroke: 1px;
+  -webkit-text-fill-color: #fff;
+  text-shadow: -.25rem .15rem #000;
 }
 
 .hidden-service {
@@ -35,14 +43,6 @@
   filter: blur(0px);
   transform: translateX(0);
   opacity: 1;
-}
-
-.title-service h2{
-  font-size: 3rem;
-  padding: 1rem;
-  -webkit-text-stroke: 1px;
-  -webkit-text-fill-color: #fff;
-  text-shadow: -.25rem .15rem #000;
 }
 
 .container-services {

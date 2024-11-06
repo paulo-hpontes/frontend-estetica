@@ -1,5 +1,5 @@
 import "./Scheduling.css";
-import { IoAddCircle } from "react-icons/io5";
+import { IoAddCircle, IoSettings } from "react-icons/io5";
 import { FaTrashAlt } from "react-icons/fa";
 // import { useInView } from "react-intersection-observer";
 
@@ -20,6 +20,7 @@ import Loading from "../../components/Loading/Loading";
 
 // Redux
 import { profile } from "../../slices/userSlice";
+import { getAllDays, newDayOff, deleteDayOff, reset as resetDay } from "../../slices/dayOffSlice";
 import {
   newScheduling,
   getAllScheduling,
@@ -36,6 +37,12 @@ const Scheduling = () => {
   const { schedulings, loading, success, error, message } = useSelector(
     (state) => state.scheduling
   );
+  const {
+    daysOff,
+    error: errorDay,
+    succes: successDay,
+    loading: loadingDay,
+  } = useSelector((state) => state.dayOff);
 
   // Store the data in the right order for the calendar
   const [events, setEvents] = useState([]);
@@ -45,6 +52,11 @@ const Scheduling = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedHours, setSelectedHours] = useState("");
   const [userName, setUserName] = useState("");
+
+  // DaysOff Modal
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedDayOff, setSelectedDayOff] = useState("");
+
 
   // Store the service Type
   const [service, setService] = useState("");
@@ -65,6 +77,7 @@ const Scheduling = () => {
   const resetMessage = () => {
     setTimeout(() => {
       dispatch(reset());
+      dispatch(resetDay());
     }, 3000);
   };
 
@@ -80,13 +93,14 @@ const Scheduling = () => {
     setFilterService(filterService);
   };
 
+  // Open and Close daysOff modal
+  const handleOpenDaysOffModal = () => setOpenModal(true);
+  const handleCloseDaysOffModal = () => setOpenModal(false);
+
   // Open and Close modal
   const handleCloseModal = () => setModalOpen(false);
   const handleOpenModal = () => {
     if (user) setUserName(user.name);
-    alert(
-      "Para fazer o agendamento, é necessário pagar uma porcentagem adiantada!"
-    );
     setSelectedHours(hoursNow);
     setSelectedDate(dateNow);
     setModalOpen(true);
@@ -103,8 +117,25 @@ const Scheduling = () => {
     setModalOpen(true);
   };
 
+  // Days off Submit
+  const handleDaysOffSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      data: new Date(selectedDayOff)
+    }
+    dispatch(newDayOff(data));
+
+    setSelectedDayOff('');
+    resetMessage();
+  };
+
+  // const handleDeleteDay = (id) => {
+  //   dispatch(deleteDayOff(id));
+  //   resetMessage();
+  // }
+
   // Handle scheduling submit
-  const saveScheduling = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!userAuth) {
@@ -155,29 +186,17 @@ const Scheduling = () => {
     });
     setEvents(newEvent);
   }, [schedulings]);
+ 
+  // Organizing DaysOff info for the Calendar
+
 
   useEffect(() => {
     dispatch(profile());
     dispatch(getAllScheduling());
+    dispatch(getAllDays());
   }, [dispatch]);
 
-  // const { ref: ref1, inView } = useInView({
-  //   threshold: 0.5,
-  // });
-  // const { ref: ref2, inView: inView2 } = useInView({
-  //   threshold: 0.5,
-  // });
-
-  // useLayoutEffect(() => {
-  //   const animations = document.querySelectorAll(".hidden-sched");
-  //   if (inView || inView2) {
-  //     animations.forEach((el) => {
-  //       el.classList.add("show-sched");
-  //     });
-  //   }
-  // }, [inView, inView2]);
-
-  if (loading || loadingUser || loadingProd) {
+  if (loading || loadingUser || loadingProd || loadingDay) {
     return <Loading />;
   }
 
@@ -186,12 +205,12 @@ const Scheduling = () => {
       <div className="title">
         <h2>Agendamentos</h2>
       </div>
-      {success && (
+      {success || successDay && (
         <small>
           <Message msg={message} type="success" />
         </small>
       )}
-      {error && (
+      {error || errorDay && (
         <small>
           <Message msg={message} type="error" />
         </small>
@@ -200,7 +219,6 @@ const Scheduling = () => {
         <div className="calendar">
           <Calendar
             localizer={localizer}
-            culture="pt-br"
             events={events}
             startAccessor="start"
             endAccessor="end"
@@ -246,29 +264,52 @@ const Scheduling = () => {
                       </button>
                     </div>
                   ) : (
-                    <>
-                    </>
+                    <></>
                   )}
                 </span>
               ))}
           </div>
-          <button
-            className="btn open-modal"
-            onClick={handleOpenModal}
-          >
-            Novo Agendamento <IoAddCircle />
-          </button>
+          <div>
+            <button className="btn open-modal" onClick={handleOpenModal}>
+              Novo Agendamento <IoAddCircle />
+            </button>
+            <button className="btn open-modal" onClick={handleOpenDaysOffModal}>
+              <IoSettings />
+            </button>
+          </div>
         </div>
       </div>
+
+      <Modal isOpen={openModal} onClose={handleCloseDaysOffModal}>
+        <h3 className="title-modal">SELECIONE O DIA</h3>
+        <form onSubmit={handleDaysOffSubmit}>
+          <p className="describe">
+            O dia selecionado ficará indisponível para agendamento
+          </p>
+          <label>
+            <span>Data:</span>
+            <input
+              type="date"
+              value={selectedDayOff}
+              onChange={(e) => setSelectedDayOff(e.target.value)}
+              min={dateNow}
+              required
+            />
+          </label>
+          <button type="submit" className="btn">
+            Adicionar
+          </button>
+        </form>
+      </Modal>
 
       <Modal
         isOpen={modalOpen}
         onClose={handleCloseModal}
-        onSubmit={saveScheduling}
+        onSubmit={handleSubmit}
       >
-        <h3>NOVO AGENDAMENTO</h3>
+        <h3 className="title-modal">NOVO AGENDAMENTO</h3>
 
-        <form className="form" onSubmit={saveScheduling}>
+        <form className="form" onSubmit={handleSubmit}>
           <label>
             <span>Cliente: </span>
             <input type="text" value={userName} required disabled />

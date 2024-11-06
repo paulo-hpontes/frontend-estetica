@@ -1,5 +1,5 @@
 #scheduling {
-  background-image: url("../../assets/olga-thelavart-vR8xIbr1EtU-unsplash.jpg");
+  background-image: url("../../assets/texture-bg.jpg");
   background-position: center;
   background-size: cover;
   color: var(--default-font-color);
@@ -158,8 +158,4 @@
 
 #scheduling .open-modal{
   margin-bottom: 3rem;
-}
-
-#scheduling .rbc-toolbar :nth-child(3) button{
-  /* display: none; */
 }

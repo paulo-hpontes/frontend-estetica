@@ -1,7 +1,6 @@
 import "./Scheduling.css";
 import { IoAddCircle, IoSettings } from "react-icons/io5";
 import { FaTrashAlt } from "react-icons/fa";
-// import { useInView } from "react-intersection-observer";
 
 // Calendar
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -9,7 +8,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import momentBr from "../../utils/momentConfig";
 
 // React Hooks
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -18,6 +17,10 @@ import Modal from "../../components/Modal/Modal";
 import ModalAlert from "../../components/ModalAlert/ModalAlert";
 import Message from "../../components/Messages/Message";
 import Loading from "../../components/Loading/Loading";
+import paymentLink from "../../services/paymentService";
+
+// Context
+import { SchedulingContext } from "../../context/SchedulingContext";
 
 // Redux
 import { profile } from "../../slices/userSlice";
@@ -28,7 +31,7 @@ import {
   reset as resetDay,
 } from "../../slices/dayOffSlice";
 import {
-  newScheduling,
+  // newScheduling,
   getAllScheduling,
   deleteScheduling,
   reset,
@@ -56,13 +59,21 @@ const Scheduling = () => {
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedHours, setSelectedHours] = useState("");
-  const [userName, setUserName] = useState("");
-  const [service, setService] = useState(""); // Store the service Type
-  const [filterService, setFilterService] = useState([]); // Stores the service's name according service Type
-  const [selectedService, setSelectedService] = useState([]); // Store the service name choice
-
+  const {
+    selectedDate,
+    setSelectedDate,
+    selectedHours,
+    setSelectedHours,
+    userName,
+    setUserName,
+    service,
+    setService,
+    filterService,
+    setFilterService,
+    selectedService,
+    setSelectedService
+  } = useContext(SchedulingContext);
+  
   // Alert Modal
   const [openAlert, setOpenAlert] = useState(false);
   const [messageAlert, setMessageAlert] = useState("");
@@ -86,7 +97,7 @@ const Scheduling = () => {
     }, 6000);
   };
 
-  // ********** DaysOff Controllers ********** //
+  // ******************** DaysOff Controllers ******************** //
 
   // Open and Close daysOff modal
   const handleOpenDaysOffModal = () => setOpenModal(true);
@@ -126,7 +137,7 @@ const Scheduling = () => {
     return false;
   };
 
-  // ********** Scheduling Controllers ********** //
+  // ******************** Scheduling Controllers ******************** //
 
   // Set the Service Name
   const handleSelectService = (e) => setSelectedService(e.target.value);
@@ -140,7 +151,16 @@ const Scheduling = () => {
     setFilterService(filterService);
   };
 
-  const schedulingAlert = (msg) => {
+  const schedulingAlert = () => {
+    setMessageAlert(
+      "Para realizarmos o agendamento, " +
+        "é necessário pagar 10% ou " +
+        "o valor completo relacionado ao serviço desejado"
+    );
+    setOpenAlert(true);
+  };
+
+  const reminderModal = (msg) => {
     setMessageAlert(msg);
     setOpenAlert(true);
   };
@@ -148,11 +168,7 @@ const Scheduling = () => {
   // Open and Close modal
   const handleCloseModal = () => setModalOpen(false);
   const handleOpenModal = () => {
-    schedulingAlert(
-      "Para realizarmos o agendamento, " +
-        "é necessário pagar 10% ou " +
-        "o valor completo relacionado ao serviço desejado"
-    );
+    schedulingAlert();
     if (user) setUserName(user.name);
     setSelectedHours(hoursNow);
     setSelectedDate(dateNow);
@@ -166,33 +182,27 @@ const Scheduling = () => {
     const hours = momentBr(slotInfo.start).format("HH:mm");
 
     if (dia === "Domingo" || dia === "Segunda-Feira") {
-      schedulingAlert("Não abrimos aos Domingos e Segundas");
+      reminderModal("Não abrimos aos Domingos e Segundas");
       return;
     }
-
     if (data < dateNow) {
-      schedulingAlert("Dia Indisponível");
+      reminderModal("Dia Indisponível");
       return;
     }
 
     const verify = verifyDayOff(data);
     if (verify) {
-      schedulingAlert("Dia Indisponível");
+      reminderModal("Dia Indisponível");
       return;
     }
-    schedulingAlert(
-      "Para realizarmos o agendamento, " +
-        "é necessário pagar 10% ou " +
-        "o valor completo relacionado ao serviço desejado"
-    );
+    schedulingAlert();
     setSelectedDate(data);
     setSelectedHours(hours);
     if (user) setUserName(user.name);
     setModalOpen(true);
   };
 
-  // Form scheduling
-  const handleSubmit = (e) => {
+  const handlePayment = async (e) => {
     e.preventDefault();
 
     if (!userAuth) {
@@ -200,41 +210,51 @@ const Scheduling = () => {
     }
 
     const verify = verifyDayOff(selectedDate);
-    if (verify) {
-      setOpenAlert(true);
-      return;
-    }
+    if (verify) return reminderModal("Dia Indisponível");
 
     if (selectedDate === dateNow && selectedHours <= hoursNow) {
-      schedulingAlert("Horário indisponível");
-      return;
+      return reminderModal("Horário indisponível");
     }
 
-    const dataStart = selectedDate + "T" + selectedHours;
-    const dataEnd = products.filter((prod) => {
+    const prodInfo = products.filter((prod) => {
       if (prod.serviceName === selectedService) return prod;
     });
 
-    const data = {
-      title: userName,
-      start: new Date(dataStart),
-      end: momentBr(new Date(dataStart)).add(dataEnd[0].time, "hours"),
-      service: {
-        type: service,
-        name: selectedService,
-      },
-      userEmail: user.email,
+    const value = prodInfo[0].serviceValue / 10;
+
+    const paymentData = {
+      id: prodInfo[0]._id,
+      unitPrice: value,
     };
 
-    dispatch(newScheduling(data));
-    setModalOpen(false);
-    setUserName("");
-    setSelectedDate("");
-    setSelectedHours("");
-    setService("");
-    setSelectedService("");
-    resetMessage();
+    const link = await paymentLink(paymentData);
+    window.open(link, "_blank");
   };
+
+  // Form scheduling
+  // const handleSubmit = () => {
+  //   const dataStart = selectedDate + "T" + selectedHours;
+
+  //   const SchedulingData = {
+  //     title: userName,
+  //     start: new Date(dataStart),
+  //     end: momentBr(new Date(dataStart)).add(prodInfo[0].time, "hours"),
+  //     service: {
+  //       type: service,
+  //       name: selectedService,
+  //     },
+  //     userEmail: user.email,
+  //   };
+
+  //   dispatch(newScheduling(SchedulingData));
+  //   setModalOpen(false);
+  //   setUserName("");
+  //   setSelectedDate("");
+  //   setSelectedHours("");
+  //   setService("");
+  //   setSelectedService("");
+  //   resetMessage();
+  // };
 
   // Delete Scheduling
   const handleDelete = (id) => {
@@ -396,14 +416,10 @@ const Scheduling = () => {
         </form>
       </Modal>
 
-      <Modal
-        isOpen={modalOpen}
-        onClose={handleCloseModal}
-        onSubmit={handleSubmit}
-      >
+      <Modal isOpen={modalOpen} onClose={handleCloseModal}>
         <h3 className="title-modal">NOVO AGENDAMENTO</h3>
 
-        <form className="form" onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handlePayment}>
           <label>
             <span>Cliente: </span>
             <input type="text" value={userName} required disabled />

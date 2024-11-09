@@ -1,0 +1,29 @@
+#success-sched {
+  background-image: url("../../assets/texture-bg.jpg");
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--default-font-color);
+}
+
+.container-result {
+  background: linear-gradient(
+    to top right,
+    var(--border-color),
+    var(--main-bg-color)
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 20rem;
+  border-radius: 2rem;
+}
+
+.container-result h1 {
+    margin: 2rem;
+}

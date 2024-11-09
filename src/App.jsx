@@ -17,6 +17,9 @@ import Register from "./pages/Auth/Register";
 import Service from "./pages/Service/Service";
 import Scheduling from "./pages/Scheduling/Scheduling";
 import Contact from "./pages/Contact/Contact";
+import Page404 from "./pages/Page404/Page404";
+import SchedSuccess from "./pages/Scheduling/SchedSuccess";
+import SchedFailure from "./pages/Scheduling/SchedFailure";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -28,11 +31,14 @@ function App() {
     <>
       <BrowserRouter>
         <Navbar />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Service />} />
-          <Route path="/scheduling" element={<Scheduling />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/scheduling" element={<Scheduling />} />
+          <Route path="/success" element={<SchedSuccess />} />
+          <Route path="/failure" element={<SchedFailure />} />
           <Route
             path="/login"
             element={!auth ? <Login /> : <Navigate to="/" />}
@@ -41,6 +47,7 @@ function App() {
             path="/register"
             element={!auth ? <Register /> : <Navigate to="/" />}
           />
+          <Route path="*" element={<Page404 />} />
         </Routes>
         <Footer />
       </BrowserRouter>

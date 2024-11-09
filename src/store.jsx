@@ -6,6 +6,7 @@ import productReducer from "./slices/productsSlice";
 import userReducer from './slices/userSlice';
 import schedulingReducer from './slices/schedulingSlice';
 import dayOffReducer from './slices/dayOffSlice';
+import paymentReducer from './slices/paymentSlice'
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     scheduling: schedulingReducer,
     user: userReducer,
     dayOff: dayOffReducer,
+    payment: paymentReducer,
   },
 });

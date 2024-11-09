@@ -9,10 +9,17 @@
 }
 
 .logo img{
-    margin: 3rem 0 0 1rem;
-    height: 7rem;
+    margin: 2rem 0 0 1rem;
+    height: 5rem;
 }
 
 #nav .btn {
     margin-right: 1rem;
+}
+
+@media (max-width: 800px){
+    .logo img{
+        margin: 3rem 0 0 1rem;
+        height: 5rem;
+    }
 }

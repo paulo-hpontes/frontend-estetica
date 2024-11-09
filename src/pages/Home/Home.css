@@ -8,11 +8,13 @@
 }
 #home .title {
   display: flex;
-  align-items: center;
-  align-items: flex-start;
-  width: 60%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  width: 75%;
+  height: 40rem;
+  margin-right: 1rem;
   font-weight: bold;
-  padding: 0 0rem 0 0;
 }
 
 #home .title h1 {
@@ -20,7 +22,8 @@
   margin-bottom: 1rem;
   -webkit-text-stroke: 1px;
   -webkit-text-fill-color: var(--main-bg-color);
-  text-shadow: .25rem .15rem var(--main-bg-color);}
+  text-shadow: 0.25rem 0.15rem var(--main-bg-color);
+}
 
 #home .title p {
   font-family: "Playwrite US Trad", serif;
@@ -42,7 +45,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 95%;
+  width: 85%;
   height: 70%;
   background-color: #ffffffb1;
   border-radius: 0 0 50% 50%;
@@ -52,7 +55,16 @@
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 2px var(--border-color);
   text-shadow: none;
+}
 
+#home .cssanimation {
+  position: absolute;
+  width: 80%;
+  height: 90dvh;
+  color: var(--main-bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 
 #home .img {
@@ -64,5 +76,152 @@
 
 #home .img img {
   background-color: #ffffffb1;
+  min-height: 30rem;
   border-radius: 40% 40% 0 0;
+  transform: scaleX(-1);
 }
+
+@media ((min-width: 760px) and (max-width: 1100px)) {
+  #home {
+    background-image: url("../../assets/texture-bg.jpg");
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    justify-content: flex-end;
+    text-align: center;
+    color: var(--default-font-color);
+  }
+
+  #home .title {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 50dvh;
+    margin: 0;
+    font-weight: bold;
+  }
+
+  #home .title .layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 100%;
+    background-color: #ffffffb1;
+    border-radius: 0 0 50% 50%;
+  }
+
+  #home .cssanimation {
+    position: absolute;
+    width: 100%;
+    height: 90dvh;
+    color: var(--main-bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  .img img {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: 50dvh;
+    margin-top: 3rem;
+  }
+}
+@media (min-width: 320px) and (max-width: 759px) and (max-height: 990px) {
+  #home {
+    background-image: url("../../assets/texture-bg.jpg");
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    justify-content: flex-end;
+    text-align: center;
+    color: var(--default-font-color);
+  }
+
+  #home .title {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 35rem;
+    margin: 0;
+    font-weight: bold;
+  }
+
+  #home .title .layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 95%;
+    height: 70%;
+    padding: 1rem;
+    background-color: #ffffffb1;
+    border-radius: 0 50% 50% 0;
+  }
+
+  #home .title h1 {
+    font-size: 3.6rem;
+    margin-bottom: 1rem;
+    -webkit-text-stroke: 1px;
+    -webkit-text-fill-color: var(--main-bg-color);
+    text-shadow: 0.25rem 0.15rem var(--main-bg-color);
+  }
+
+  #home .title p {
+    font-family: "Playwrite US Trad", serif;
+    font-size: 1.3rem;
+    font-weight: bold;
+    max-width: 80%;
+    background: linear-gradient(
+      to right,
+      var(--main-bg-color),
+      var(--border-color)
+    );
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+  }
+
+  #home .title .btn {
+    background-color: var(--button-color);
+    border: 1.5px solid var(--border-color);
+    color: var(--default-font-color);
+    max-width: 8rem;
+    border-radius: 0.4rem;
+    padding: 0.5rem 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    cursor: pointer;
+  }
+
+  #home .cssanimation {
+    display: none;
+  }
+
+  #home .img {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    min-height: 50dvh;
+  }
+
+  #home .img img {
+    background: none;
+    width: 75%;
+  }
+}
+
+

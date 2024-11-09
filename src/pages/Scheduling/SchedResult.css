@@ -9,7 +9,7 @@
   color: var(--default-font-color);
 }
 
-.container-sucesso {
+.container-result {
   background: linear-gradient(
     to top right,
     var(--border-color),
@@ -24,6 +24,6 @@
   border-radius: 2rem;
 }
 
-.container-sucesso h1 {
+.container-result h1 {
     margin: 2rem;
 }

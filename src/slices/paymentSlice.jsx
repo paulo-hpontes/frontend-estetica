@@ -3,6 +3,7 @@ import paymentService from "../services/paymentService";
 
 const initialState = {
   payments: [],
+  link: null,
   error: false,
   success: false,
   loading: false,
@@ -19,6 +20,20 @@ export const getAllPayment = createAsyncThunk(
     return data;
   }
 );
+
+export const generatePaymentLink = createAsyncThunk(
+  "payment/post",
+  async(paymentData, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await paymentService.paymentLink(paymentData, token);
+
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  }
+)
 
 export const deletePayment = createAsyncThunk(
   "payment/delete",
@@ -38,8 +53,9 @@ export const updatePayment = createAsyncThunk(
   "payment/update",
   async (paymentData, thunkAPI) => {
     const token = thunkAPI.getState().auth.user.token;
+    const status = {paymentStatus: paymentData.paymentStatus}
     const data = await paymentService.updatePayment(
-      paymentData.paymentStatus,
+      status,
       paymentData.id,
       token
     );
@@ -82,6 +98,23 @@ export const paymentSlice = createSlice({
         state.error = true;
         state.message = action.payload.message;
       })
+      .addCase(generatePaymentLink.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.success = false;
+      })
+      .addCase(generatePaymentLink.fulfilled, (state,action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = false;
+        state.link = action.payload;
+      })
+      .addCase(generatePaymentLink.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = true;
+        state.message = action.payload.message;
+      })
       .addCase(deletePayment.pending, (state) => {
         state.loading = true;
         state.error = false;
@@ -107,7 +140,7 @@ export const paymentSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.payment = action.payload;
+        state.payments = action.payload;
       })
       .addCase(updatePayment.rejected, (state, action) => {
         state.loading = false;

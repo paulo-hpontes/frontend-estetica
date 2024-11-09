@@ -8,7 +8,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import momentBr from "../../utils/momentConfig";
 
 // React Hooks
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -17,13 +17,10 @@ import Modal from "../../components/Modal/Modal";
 import ModalAlert from "../../components/ModalAlert/ModalAlert";
 import Message from "../../components/Messages/Message";
 import Loading from "../../components/Loading/Loading";
-import paymentLink from "../../services/paymentService";
-
-// Context
-import { SchedulingContext } from "../../context/SchedulingContext";
 
 // Redux
 import { profile } from "../../slices/userSlice";
+import { generatePaymentLink } from "../../slices/paymentSlice";
 import {
   getAllDays,
   newDayOff,
@@ -31,7 +28,6 @@ import {
   reset as resetDay,
 } from "../../slices/dayOffSlice";
 import {
-  // newScheduling,
   getAllScheduling,
   deleteScheduling,
   reset,
@@ -39,6 +35,7 @@ import {
 
 const Scheduling = () => {
   // redux-states
+  const { link, loading: loadingPay } = useSelector((state) => state.payment);
   const { user, loading: loadingUser } = useSelector((state) => state.user);
   const { user: userAuth } = useSelector((state) => state.auth);
   const { products, loading: loadingProd } = useSelector(
@@ -59,21 +56,13 @@ const Scheduling = () => {
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
-  const {
-    selectedDate,
-    setSelectedDate,
-    selectedHours,
-    setSelectedHours,
-    userName,
-    setUserName,
-    service,
-    setService,
-    filterService,
-    setFilterService,
-    selectedService,
-    setSelectedService
-  } = useContext(SchedulingContext);
-  
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedHours, setSelectedHours] = useState("");
+  const [userName, setUserName] = useState("");
+  const [service, setService] = useState(""); // Store the service Type
+  const [filterService, setFilterService] = useState([]); // Stores the service's name according service Type
+  const [selectedService, setSelectedService] = useState([]); // Store the service name choice
+
   // Alert Modal
   const [openAlert, setOpenAlert] = useState(false);
   const [messageAlert, setMessageAlert] = useState("");
@@ -154,8 +143,8 @@ const Scheduling = () => {
   const schedulingAlert = () => {
     setMessageAlert(
       "Para realizarmos o agendamento, " +
-        "é necessário pagar 10% ou " +
-        "o valor completo relacionado ao serviço desejado"
+        "é necessário pagar 50% " +
+        "do valor relacionado ao serviço desejado"
     );
     setOpenAlert(true);
   };
@@ -168,8 +157,12 @@ const Scheduling = () => {
   // Open and Close modal
   const handleCloseModal = () => setModalOpen(false);
   const handleOpenModal = () => {
+    if (!userAuth) {
+      return navigate("/login");
+    }
+
     schedulingAlert();
-    if (user) setUserName(user.name);
+    setUserName(user.name);
     setSelectedHours(hoursNow);
     setSelectedDate(dateNow);
     setModalOpen(true);
@@ -180,6 +173,10 @@ const Scheduling = () => {
     const data = momentBr(slotInfo.start).format("yyyy-MM-DD");
     const dia = momentBr(slotInfo.start).format("dddd");
     const hours = momentBr(slotInfo.start).format("HH:mm");
+
+    if (!userAuth) {
+      return navigate("/login");
+    }
 
     if (dia === "Domingo" || dia === "Segunda-Feira") {
       reminderModal("Não abrimos aos Domingos e Segundas");
@@ -195,19 +192,16 @@ const Scheduling = () => {
       reminderModal("Dia Indisponível");
       return;
     }
+
     schedulingAlert();
     setSelectedDate(data);
     setSelectedHours(hours);
-    if (user) setUserName(user.name);
+    setUserName(user.name);
     setModalOpen(true);
   };
 
-  const handlePayment = async (e) => {
+  const handlePayment = (e) => {
     e.preventDefault();
-
-    if (!userAuth) {
-      return navigate("/login");
-    }
 
     const verify = verifyDayOff(selectedDate);
     if (verify) return reminderModal("Dia Indisponível");
@@ -220,41 +214,45 @@ const Scheduling = () => {
       if (prod.serviceName === selectedService) return prod;
     });
 
-    const value = prodInfo[0].serviceValue / 10;
+    const value = prodInfo[0].serviceValue / 50;
 
     const paymentData = {
       id: prodInfo[0]._id,
       unitPrice: value,
     };
 
-    const link = await paymentLink(paymentData);
-    window.open(link, "_blank");
+    handleSubmit(prodInfo);
+    dispatch(generatePaymentLink(paymentData));
   };
 
+  useEffect(() => {
+    if (link) window.location.href = link;
+  }, [link]);
+
   // Form scheduling
-  // const handleSubmit = () => {
-  //   const dataStart = selectedDate + "T" + selectedHours;
+  const handleSubmit = (prodInfo) => {
+    const dataStart = selectedDate + "T" + selectedHours;
 
-  //   const SchedulingData = {
-  //     title: userName,
-  //     start: new Date(dataStart),
-  //     end: momentBr(new Date(dataStart)).add(prodInfo[0].time, "hours"),
-  //     service: {
-  //       type: service,
-  //       name: selectedService,
-  //     },
-  //     userEmail: user.email,
-  //   };
+    const SchedulingData = {
+      title: userName,
+      start: new Date(dataStart),
+      end: momentBr(new Date(dataStart)).add(prodInfo[0].time, "hours"),
+      service: {
+        type: service,
+        name: selectedService,
+      },
+      userEmail: user.email,
+    };
 
-  //   dispatch(newScheduling(SchedulingData));
-  //   setModalOpen(false);
-  //   setUserName("");
-  //   setSelectedDate("");
-  //   setSelectedHours("");
-  //   setService("");
-  //   setSelectedService("");
-  //   resetMessage();
-  // };
+    localStorage.setItem("scheduling", JSON.stringify(SchedulingData));
+    setModalOpen(false);
+    setUserName("");
+    setSelectedDate("");
+    setSelectedHours("");
+    setService("");
+    setSelectedService("");
+    resetMessage();
+  };
 
   // Delete Scheduling
   const handleDelete = (id) => {
@@ -281,7 +279,7 @@ const Scheduling = () => {
     dispatch(getAllDays());
   }, [dispatch]);
 
-  if (loading || loadingUser || loadingProd || loadingDay) {
+  if (loading || loadingUser || loadingProd || loadingDay || loadingPay) {
     return <Loading />;
   }
 
@@ -506,22 +504,21 @@ const Scheduling = () => {
             </>
           )}
 
-          {service && (
-            <>
-              <select
-                value={selectedService}
-                onChange={handleSelectService}
-                required
-              >
-                <option value="">Selecione uma opção</option>
-                {filterService &&
-                  filterService.map((service) => (
-                    <option value={service.serviceName} key={service._id}>
-                      {service.serviceName}
-                    </option>
-                  ))}
-              </select>
-            </>
+          {filterService && filterService.length > 0 ? (
+            <select
+              value={String(selectedService)}
+              onChange={handleSelectService}
+              required
+            >
+              <option value="">Selecione uma opção</option>
+              {filterService.map((service) => (
+                <option value={service.serviceName} key={service._id}>
+                  {service.serviceName}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <></>
           )}
 
           {!loading && (

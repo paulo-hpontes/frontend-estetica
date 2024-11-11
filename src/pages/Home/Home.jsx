@@ -31,9 +31,9 @@ const Home = () => {
           <FaAngleDoubleDown size={40} />
         </div>
       </section>
-      {/* <Service />
+      <Service />
       <Scheduling />
-      <Contact /> */}
+      {/* <Contact /> */}
     </>
   );
 };

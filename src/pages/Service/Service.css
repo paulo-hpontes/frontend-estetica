@@ -131,7 +131,7 @@
   }
   
 }
-@media (min-width: 320px) and (max-width: 759px) and (max-height: 990px) {
+@media (min-width: 320px) and (max-width: 759px) and (max-height: 1040px) {
   .title-service {
     display: flex;
     align-items: center;

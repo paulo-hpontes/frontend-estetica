@@ -33,7 +33,7 @@ const Home = () => {
       </section>
       <Service />
       <Scheduling />
-      {/* <Contact /> */}
+      <Contact />
     </>
   );
 };

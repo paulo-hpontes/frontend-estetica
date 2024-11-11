@@ -5,6 +5,7 @@
   display: flex;
   text-align: center;
   color: var(--default-font-color);
+  min-height: 100dvh;
 }
 #home .title {
   display: flex;
@@ -136,7 +137,7 @@
     margin-top: 3rem;
   }
 }
-@media (min-width: 320px) and (max-width: 759px) and (max-height: 990px) {
+@media (min-width: 320px) and (max-width: 759px) and (max-height: 1040px) {
   #home {
     background-image: url("../../assets/texture-bg.jpg");
     background-position: center;

@@ -18,23 +18,11 @@
   );
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
   width: 40%;
   height: 7rem;
-  margin: 3rem 0 3rem auto;
-  border-radius: 2rem 0 0 2rem;
-}
-
-.hidden-sched {
-  opacity: 0;
-  filter: blur(15px);
-  transform: translateX(-100%);
-}
-
-.show-sched {
-  opacity: 1;
-  filter: blur(0);
-  transform: translateX(0);
+  margin: 3rem auto 3rem 0;
+  border-radius: 0 2rem 2rem 0;
 }
 
 #scheduling .title h2 {
@@ -52,13 +40,6 @@
   min-height: 30rem;
 }
 
-.scheduling-content :nth-child(1) {
-  transition-delay: 800ms;
-}
-
-.scheduling-content :nth-child(2) {
-  transition-delay: 600ms;
-}
 
 #scheduling .calendar {
   color: #000;
@@ -82,6 +63,11 @@
 #scheduling .rbc-toolbar {
   color: var(--default-font-color);
   background-color: var(--main-bg-color);
+}
+
+#scheduling .rbc-toolbar-label {
+  font-size: 1.4rem;
+  font-weight: bold;
 }
 
 #scheduling .rbc-day-bg {
@@ -149,16 +135,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  text-align: left;
   width: 90%;
+  height: 6rem;
+  margin: 1rem auto;
+  text-align: left;
   padding: 0.5rem;
   background-color: var(--border-color);
-  margin: 1rem;
   border-radius: 0.5rem;
 }
 
 .scheduling-details h4 {
-  margin-bottom: .3rem;
+  margin-bottom: .4rem;
 }
 
 #scheduling .open-modal{
@@ -203,4 +190,125 @@
 
 .daysoff p button{
   margin-left: .5rem;
+}
+
+@media ((min-width: 760px) and (max-width: 1115px)) {
+  #scheduling .title {  
+    width: 50%;
+  }
+
+  #scheduling .rbc-toolbar {
+    flex-direction: column;
+  }
+  
+  #scheduling .rbc-toolbar-label {
+    font-size: 2rem;
+    margin: 1rem;
+  }
+
+  #scheduling .rbc-btn-group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #scheduling .rbc-btn-group button {
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 5rem;
+    cursor: pointer;
+  }
+  
+  .personal-scheduling {
+    width: 80%;
+  }
+
+  .scheduling-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    height: auto;
+    width: 70%;
+  }
+  
+  .scheduling-details button{
+    margin-top: 1rem;
+  } 
+  
+}
+
+@media (min-width: 320px) and (max-width: 759px) and (max-height: 1040px) {
+
+  #scheduling .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 7rem;
+    margin: 3rem 0;
+    padding: 1rem;
+    border-radius: 2rem;
+    box-shadow: 0 .2rem 0.5rem 0.2rem var(--border-color);
+  }
+
+  #scheduling .title h2 {
+    font-size: 2.5rem;
+  }
+
+  .daysoff {
+    margin: 2rem auto;  
+  }
+
+  #scheduling .scheduling-content {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #scheduling .calendar {
+    width: 80%;
+    height: 20rem;
+    margin: auto;
+  }
+
+  #scheduling .rbc-btn-group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #scheduling .rbc-btn-group button {
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 5rem;
+    padding: .2rem;
+  }
+
+  .scheduling-info {
+    width: 100%;
+  }
+
+  .personal-scheduling {
+    margin: 3rem auto;
+    width: 80%;
+  }
+
+  .scheduling-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    height: auto;
+    width: 70%;
+  }
+  
+  .scheduling-details button{
+    margin-top: 1rem;
+  }
+
 }

@@ -8,6 +8,7 @@
   align-items: center;
   text-align: center;
   color: var(--default-font-color);
+  height: 100dvh;
 }
 
 #register,

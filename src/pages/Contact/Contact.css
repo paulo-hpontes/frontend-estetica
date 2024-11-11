@@ -13,16 +13,21 @@
 }
 
 .address {
-  width: 90%;
-  padding: 2rem 2rem;
+  width: 80%;
+  padding: 1rem;
 }
 
 .address-content {
   margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
+
+.address div{
+  z-index: 1;
+}
+
 
 .address-content h3 {
   -webkit-text-stroke: 1px;
@@ -32,8 +37,17 @@
   margin-bottom: 1rem;
 }
 
-.address-content img {
-  height: 10rem;
+#contact .img{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+}
+
+#contact .img img {
+  height: 15rem;
+  opacity: .5;
 }
 
 .contact-info p,
@@ -41,17 +55,11 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin: 0.7rem;
 }
 
-.contact-info p svg,
-.contact-info a {
-  font-size: 2rem;
-  margin-right: 0.5rem;
-}
 
 .address-content p {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .address .title h2 {
@@ -66,4 +74,32 @@
   height: 0.2rem;
   background-color: #fff;
   margin-bottom: 5rem;
+}
+
+
+@media (min-width: 320px) and (max-width: 759px) and (max-height: 1040px) {
+  
+  .address-content{
+    flex-direction: column;
+  }
+  
+  .address-content div{
+    margin: 3rem 1rem;
+  }
+
+  #contact .img{
+    display: none;
+  }
+
+}
+
+@media (max-height: 450px) and (min-width: 320px) and (max-width: 960px)  {
+  
+  .address-content div{
+    margin: 3rem 1rem;
+  }
+
+  #contact .img{
+    display: none;
+  }
 }

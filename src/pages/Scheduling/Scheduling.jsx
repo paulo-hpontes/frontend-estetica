@@ -301,7 +301,7 @@ const Scheduling = () => {
 
       {daysOff.length > 0 && (
         <div className="daysoff">
-          <h3>Dias indisponíveis para agendamento:</h3>
+          <h3>Dias indisponíveis<br/>para agendamento:</h3>
           {daysOff.map((day) => (
             <p key={day._id}>
               {momentBr(day.date).format("L")}
@@ -350,7 +350,7 @@ const Scheduling = () => {
                       <div>
                         <h4>{sched.title.toUpperCase()}</h4>
                         <p>
-                          {sched.service.typeService}:{" "}
+                          {sched.service.typeService}:{" "} 
                           {sched.service.nameService}
                         </p>
                       </div>

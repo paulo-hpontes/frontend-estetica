@@ -117,15 +117,17 @@
   }
 
   #home .cssanimation {
-    position: absolute;
-    width: 100%;
-    height: 90dvh;
-    color: var(--main-bg-color);
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    display: none;
   }
-  .img img {
+
+  #home .img {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    width: 40%;
+  }
+
+  #home .img img {
     display: flex;
     align-items: flex-end;
     justify-content: center;

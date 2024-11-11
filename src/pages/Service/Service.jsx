@@ -2,7 +2,6 @@
 import "./Service.css";
 import { IoAddCircle } from "react-icons/io5";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import { useInView } from "react-intersection-observer";
 
 // Components
 import Modal from "../../components/Modal/Modal";
@@ -11,7 +10,7 @@ import Loading from "../../components/Loading/Loading";
 
 // React Hooks
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 
 // Redux
 import {
@@ -113,29 +112,13 @@ const Service = () => {
     dispatch(getAllProducts());
   }, [dispatch]);
 
-  const { ref, inView } = useInView({
-    threshold: 0.5,
-  });
-  const { ref: ref3, inView: inView3 } = useInView({
-    threshold: 0.5,
-  });
-
-  useLayoutEffect(() => {
-    const animations = document.querySelectorAll(".hidden-service");
-    if (inView || inView3) {
-      animations.forEach((el) => {
-        el.classList.add("show-service");
-      });
-    }
-  }, [inView, inView3]);
-
   if (loading) {
     return <Loading />;
   }
 
   return (
-    <section id="services" className="container" >
-      <div className="title-service hidden-service" ref={ref}>
+    <section id="services" className="container">
+      <div className="title-service" >
         <h2>Serviços</h2>
       </div>
       {success && (
@@ -148,8 +131,8 @@ const Service = () => {
           <Message msg={message} type="error" />
         </small>
       )}
-      <div className="container-services" ref={ref3}>
-        <div className="services-content hidden-service">
+      <div className="container-services">
+        <div className="services-content">
           <h3>Cílios</h3>
           {products &&
             products.map((product) => (
@@ -182,7 +165,7 @@ const Service = () => {
               </span>
             ))}
         </div>
-        <div className="services-content hidden-service">
+        <div className="services-content">
           <h3>Sobrancelhas</h3>
           {products &&
             products.map((product) => (
@@ -215,7 +198,7 @@ const Service = () => {
               </span>
             ))}
         </div>
-        <div className="services-content hidden-service">
+        <div className="services-content">
           <h3>Depilação</h3>
           {products &&
             products.map((product) => (

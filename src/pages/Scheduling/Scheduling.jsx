@@ -142,9 +142,9 @@ const Scheduling = () => {
 
   const schedulingAlert = () => {
     setMessageAlert(
-      "Para realizarmos o agendamento, " +
-        "é necessário pagar 50% " +
-        "do valor relacionado ao serviço desejado"
+      "Para garantir sua reserva, " +
+        "solicitamos um depósito de R$10. " +
+        "Este valor será deduzido do seu pagamento total"
     );
     setOpenAlert(true);
   };

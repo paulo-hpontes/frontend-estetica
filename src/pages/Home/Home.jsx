@@ -25,7 +25,7 @@ const Home = () => {
           </div>
         </div>
         <div className="img">
-          <img src={homeIMG} alt="Imagem de apresentação" />
+          <img src={homeIMG} alt="Imagem de apresentação" draggable="false" />
         </div>
         <div className="cssanimation hu__hu__">
           <FaAngleDoubleDown size={40} />

@@ -1,6 +1,6 @@
 import "./Scheduling.css";
 import { IoAddCircle, IoSettings } from "react-icons/io5";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaCalendarAlt } from "react-icons/fa";
 
 // Calendar
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -10,7 +10,7 @@ import momentBr from "../../utils/momentConfig";
 // React Hooks
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Components
 import Modal from "../../components/Modal/Modal";
@@ -71,6 +71,9 @@ const Scheduling = () => {
   // DaysOff Modal
   const [openModal, setOpenModal] = useState(false);
   const [selectedDayOff, setSelectedDayOff] = useState("");
+
+  // Scheduling filter
+  const [userSched, setUserSched] = useState(null);
 
   const dateNow = momentBr().format("yyyy-MM-DD");
   const hoursNow = momentBr().format("HH:mm");
@@ -200,8 +203,21 @@ const Scheduling = () => {
     setModalOpen(true);
   };
 
+  // Delete Scheduling
+  const handleDelete = (id) => {
+    dispatch(deleteScheduling(id));
+    resetMessage();
+  };
+
+  // Payment for schedule
   const handlePayment = (e) => {
     e.preventDefault();
+
+    const dia = momentBr(selectedDate).format("dddd");
+    if (dia === "Domingo" || dia === "Segunda-Feira") {
+      reminderModal("Não abrimos aos Domingos e Segundas");
+      return;
+    }
 
     const verify = verifyDayOff(selectedDate);
     if (verify) return reminderModal("Dia Indisponível");
@@ -214,20 +230,15 @@ const Scheduling = () => {
       if (prod.serviceName === selectedService) return prod;
     });
 
-    const value = prodInfo[0].serviceValue / 50;
-
     const paymentData = {
       id: prodInfo[0]._id,
-      unitPrice: value,
+      unitPrice: 10,
     };
 
+    localStorage.removeItem("scheduling");
     handleSubmit(prodInfo);
     dispatch(generatePaymentLink(paymentData));
   };
-
-  useEffect(() => {
-    if (link) window.location.href = link;
-  }, [link]);
 
   // Form scheduling
   const handleSubmit = (prodInfo) => {
@@ -254,11 +265,24 @@ const Scheduling = () => {
     resetMessage();
   };
 
-  // Delete Scheduling
-  const handleDelete = (id) => {
-    dispatch(deleteScheduling(id));
-    resetMessage();
-  };
+  // Navigatr to payment link
+  useEffect(() => {
+    if (link) window.location.href = link;
+  }, [link]);
+
+  // Verify if user has schedule or user is Admin
+  useEffect(() => {
+    if (user && schedulings) {
+      const verify = schedulings.filter((sched) => {
+        if (user.admin || user.email === sched.userEmail){
+          return sched;
+        }
+      });
+      if (verify.length){
+        setUserSched(verify);
+      }
+    }
+  }, [user, schedulings]);
 
   // Organizing scheduling info for the Calendar
   useEffect(() => {
@@ -301,7 +325,11 @@ const Scheduling = () => {
 
       {daysOff.length > 0 && (
         <div className="daysoff">
-          <h3>Dias indisponíveis<br/>para agendamento:</h3>
+          <h3>
+            Dias indisponíveis
+            <br />
+            para agendamento:
+          </h3>
           {daysOff.map((day) => (
             <p key={day._id}>
               {momentBr(day.date).format("L")}
@@ -340,36 +368,53 @@ const Scheduling = () => {
         </div>
         <div className="scheduling-info">
           <div className="personal-scheduling">
-            <h3>Meus Agendamentos</h3>
-            {schedulings &&
-              schedulings.map((sched) => (
-                <span key={sched._id}>
-                  {(user && user.admin) ||
-                  (user && user.email === sched.userEmail) ? (
-                    <div className="scheduling-details">
-                      <div>
-                        <h4>{sched.title.toUpperCase()}</h4>
-                        <p>
-                          {sched.service.typeService}:{" "} 
-                          {sched.service.nameService}
-                        </p>
+            {userAuth ? (
+              <>
+                <h3>Meus Agendamentos</h3>
+                {userSched ? (
+                  <>
+                    {userSched.map((sched) => (
+                      <div className="scheduling-details" key={sched._id}>
+                        <div>
+                          <h4>{sched.title.toUpperCase()}</h4>
+                          <p>
+                            {sched.service.typeService}:{" "}
+                            {sched.service.nameService}
+                          </p>
+                        </div>
+                        <div>
+                          <p>{momentBr(sched.start).format("L")}</p>
+                          <p>{momentBr(sched.start).fromNow()}</p>
+                        </div>
+                        <button
+                          className="btn"
+                          onClick={() => handleDelete(sched._id)}
+                        >
+                          <FaTrashAlt />
+                        </button>
                       </div>
-                      <div>
-                        <p>{momentBr(sched.start).format("L")}</p>
-                        <p>{momentBr(sched.start).fromNow()}</p>
-                      </div>
-                      <button
-                        className="btn"
-                        onClick={() => handleDelete(sched._id)}
-                      >
-                        <FaTrashAlt />
-                      </button>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                </span>
-              ))}
+                    ))}
+                  </>
+                ) : (
+                  <div className="no-scheduling">
+                    <p> Parece que você ainda não tem agendamento conosco!</p>
+                    <FaCalendarAlt size={60} />
+                    <p>
+                      Escolha uma data no calendário ou vá em &quot;Novo
+                      Agendamento&quot;
+                    </p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="noUser-scheduling">
+                <p>Faça login e realize o agendamento do serviço desejado!</p>
+                <FaCalendarAlt size={60} />
+                <p>
+                  Para realizar o login <Link to={"/login"}>clique aqui</Link>
+                </p>
+              </div>
+            )}
           </div>
           <div>
             <button className="btn open-modal" onClick={handleOpenModal}>

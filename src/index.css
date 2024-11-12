@@ -6,6 +6,11 @@
   font-family: "Roboto", sans-serif;
   transition: all 400ms;
   scroll-behavior: smooth;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
 }
 
 :root {
@@ -26,6 +31,7 @@ a {
 }
 
 a:hover {
+  cursor: pointer;
   color: var(--border-color);
 }
 
@@ -40,6 +46,10 @@ a:hover {
   font-weight: 700;
   letter-spacing: 0.05rem;
   cursor: pointer;
+}
+
+.btn:hover {
+  background-color: var(--border-color);
 }
 
 .btn:active {

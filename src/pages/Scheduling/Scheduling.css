@@ -148,6 +148,41 @@
   margin-bottom: .4rem;
 }
 
+.no-scheduling{
+  height: 70%;
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-scheduling p,
+.noUser-scheduling p{
+  cursor: default;
+  color: #d1cccc;
+  letter-spacing: normal;
+  width: 90%;
+  margin: 1.5rem 0;
+  font-size: 1.3rem;
+}
+
+.no-scheduling svg,
+.noUser-scheduling svg{
+  color: #b6b2b2;
+}
+
+.noUser-scheduling{
+  height: 100%;
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
 #scheduling .open-modal{
   margin-bottom: 3rem;
 }

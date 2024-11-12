@@ -62,7 +62,6 @@ const SchedSuccess = () => {
         id: updateId,
         paymentStatus: status,
       };
-      console.log(paymentData);
       dispatch(updatePayment(paymentData));
     }
   }, [updateId, status, dispatch]);

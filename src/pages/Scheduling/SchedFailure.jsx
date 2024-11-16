@@ -38,17 +38,21 @@ const SchedFailure = () => {
   // Find the payment by preferenceID
   useEffect(() => {
     if (payments && payments.length > 0) {
-      const verify = payments.find((pay) => pay.paymentId === preferenceID);
-      if (verify) {
-        setDeleteId(verify._id);
+      if (preferenceID) {
+        const verify = payments.find((pay) => pay.paymentId === preferenceID);
+        if (verify) {
+          setDeleteId(verify._id);
+        }
       }
     }
   }, [payments, preferenceID]);
 
   // Delete payment
-  useEffect(() => {
-    dispatch(deletePayment(deleteId));
-    localStorage.removeItem("scheduling");
+  useEffect(() => { 
+    if (deleteId) {
+      dispatch(deletePayment(deleteId));
+      localStorage.removeItem("scheduling");
+    }
   }, [deleteId, dispatch]);
 
   // timer to navigate

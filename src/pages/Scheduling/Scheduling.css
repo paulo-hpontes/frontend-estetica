@@ -44,7 +44,7 @@
 #scheduling .calendar {
   color: #000;
   background-color: #eee; 
-  box-shadow: 0 0 0.5rem 0.5rem var(--border-color);
+  box-shadow: 0 0 0.5rem 0.2rem var(--border-color);
   width: 50%;
   height: 30rem;
   margin-left: 1rem;
@@ -286,7 +286,6 @@
     margin: 3rem 0;
     padding: 1rem;
     border-radius: 2rem;
-    box-shadow: 0 .2rem 0.5rem 0.2rem var(--border-color);
   }
 
   #scheduling .title h2 {
@@ -358,7 +357,6 @@
     margin: 3rem 0;
     padding: 1rem;
     border-radius: 2rem;
-    box-shadow: 0 .2rem 0.5rem 0.2rem var(--border-color);
   }
 
   #scheduling .title h2 {

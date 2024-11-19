@@ -1,4 +1,4 @@
-export const api = 'http://localhost:8086/api';
+export const api = 'https://api-estetica-five.vercel.app/api';
 
 export const requestConfig = (method, data, token = null) => {
     let config;

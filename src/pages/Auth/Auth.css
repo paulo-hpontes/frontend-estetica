@@ -25,7 +25,7 @@
   margin-bottom: 3rem;
   -webkit-text-stroke: 1px;
   -webkit-text-fill-color: #fff;
-  text-shadow: -.25rem .15rem var(--border-color);
+  text-shadow: -0.25rem 0.15rem var(--border-color);
   font-weight: bolder;
 }
 
@@ -35,4 +35,14 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 2.5rem;
+}
+
+@media (min-width: 320px) and (max-width: 759px) and (max-height: 1040px) {
+  #register,
+  #login .form {
+    background: rgba(0, 0, 0, 0.5);
+    background: linear-gradient(to bottom left, #fff, var(--border-color));
+    box-shadow: -0.5rem 0.5rem 0.5rem 0.3rem var(--border-color);
+    padding: 1rem 2rem;
+  }
 }

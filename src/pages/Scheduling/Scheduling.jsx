@@ -355,7 +355,7 @@ const Scheduling = () => {
             selectable={true}
             onSelectSlot={handleSelectSlot}
             defaultView="month"
-            views={["day", "week", "month"]}
+            views={["week", "month"]}
             messages={{
               next: "PRÓXIMO",
               previous: "ANTERIOR",

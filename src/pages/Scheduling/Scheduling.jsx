@@ -352,6 +352,7 @@ const Scheduling = () => {
             events={events}
             startAccessor="start"
             endAccessor="end"
+            longPressThreshold={100}
             selectable={true}
             onSelectSlot={handleSelectSlot}
             defaultView="month"

@@ -16,17 +16,17 @@ const Contact = () => {
           <div>
             <h3>Endereço:</h3>
             <p>
-              <strong>Rua:</strong> Oscar Romero, 105
+              <strong>Rua:</strong> Treze de Maio, 609
             </p>
             <p>
               <strong>Bairro:</strong> Terra Nova, Manaus/Am
             </p>
             <p>
-            <strong>CEP:</strong> 69097-475
+            <strong>CEP:</strong> 69093-449
             </p>
             <button className="btn">
               <a
-                href="https://maps.app.goo.gl/qGxRgkCRFmw9G4Mk8"
+                href="https://maps.app.goo.gl/zFkPcCLmkNj6TkVa9"
                 target="_blank"
               >
                 Veja no mapa
@@ -37,7 +37,7 @@ const Contact = () => {
             <h3>Contato:</h3>
             <p>
               <BsFillTelephoneFill size={30} style={{"marginRight": ".5rem"}}/>
-              <strong>(92) 99459-7308</strong>
+              <strong>(92) 99206-5565</strong>
             </p>
            
               <a

@@ -177,6 +177,13 @@ const Scheduling = () => {
     const dia = momentBr(slotInfo.start).format("dddd");
     const hours = momentBr(slotInfo.start).format("HH:mm");
 
+    const end = momentBr(slotInfo.start).add(1, "days");
+    if (
+      momentBr(new Date(slotInfo.end)).format("l") !==
+      momentBr(new Date(end)).format("l")
+    )
+      return;
+
     if (!userAuth) {
       return navigate("/login");
     }
@@ -274,11 +281,11 @@ const Scheduling = () => {
   useEffect(() => {
     if (user && schedulings) {
       const verify = schedulings.filter((sched) => {
-        if (user.admin || user.email === sched.userEmail){
+        if (user.admin || user.email === sched.userEmail) {
           return sched;
         }
       });
-      if (verify.length){
+      if (verify.length) {
         setUserSched(verify);
       }
     }
@@ -356,7 +363,7 @@ const Scheduling = () => {
             selectable={true}
             onSelectSlot={handleSelectSlot}
             defaultView="month"
-            views={["week", "month"]}
+            views={["month"]}
             messages={{
               next: "PRÓXIMO",
               previous: "ANTERIOR",
@@ -398,11 +405,11 @@ const Scheduling = () => {
                   </>
                 ) : (
                   <div className="no-scheduling">
-                    <p> Parece que você ainda não tem agendamento conosco!</p>
+                    <p> Parece que você ainda não possui nenhum agendamento registrado!</p>
                     <FaCalendarAlt size={60} />
                     <p>
-                      Escolha uma data no calendário ou vá em &quot;Novo
-                      Agendamento&quot;
+                    Selecione uma data no calendário ou clique em &quot;Novo
+                      Agendamento&quot; para começar.
                     </p>
                   </div>
                 )}

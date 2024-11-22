@@ -239,7 +239,7 @@ const Scheduling = () => {
 
     const paymentData = {
       id: prodInfo[0]._id,
-      unitPrice: 10,
+      unitPrice: 1,
     };
 
     localStorage.removeItem("scheduling");

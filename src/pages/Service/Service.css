@@ -156,7 +156,7 @@
   }
 
   #services .services-content {
-    margin: 1rem;
+    margin: .5rem;
     box-shadow: 0 0 0.5rem 0.2rem var(--border-color);
   }
 
@@ -169,7 +169,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  
+        
     margin: 1rem 0.5rem 2rem 0.5rem;
     font-weight: bold;
     border-bottom: 2px solid #fff;

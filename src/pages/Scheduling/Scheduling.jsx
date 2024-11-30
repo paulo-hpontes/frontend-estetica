@@ -187,7 +187,7 @@ const Scheduling = () => {
   // Open modal by selected slot
   const handleSelectSlot = (slotInfo) => {
     const data = momentBr(slotInfo.start).format("yyyy-MM-DD");
-    const dia = momentBr(slotInfo.start).format("dddd");
+    // const dia = momentBr(slotInfo.start).format("dddd");
     const hours = momentBr(slotInfo.start).format("HH:mm");
 
     const end = momentBr(slotInfo.start).add(1, "days");
@@ -202,10 +202,10 @@ const Scheduling = () => {
       return navigate("/login");
     }
 
-    if (dia === "Domingo" || dia === "Segunda-Feira") {
-      reminderModal("Não abrimos aos Domingos e Segundas");
-      return;
-    }
+    // if (dia === "Domingo" || dia === "Segunda-Feira") {
+    //   reminderModal("Não abrimos aos Domingos e Segundas");
+    //   return;
+    // }
     if (data < dateNow) {
       reminderModal("Dia Indisponível");
       return;
@@ -234,11 +234,11 @@ const Scheduling = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const dia = momentBr(selectedDate).format("dddd");
-    if (dia === "Domingo" || dia === "Segunda-Feira") {
-      reminderModal("Não abrimos aos Domingos e Segundas");
-      return;
-    }
+    // const dia = momentBr(selectedDate).format("dddd");
+    // if (dia === "Domingo" || dia === "Segunda-Feira") {
+    //   reminderModal("Não abrimos aos Domingos e Segundas");
+    //   return;
+    // }
 
     const verify = verifyDayOff(selectedDate);
     if (verify) return reminderModal("Dia Indisponível");

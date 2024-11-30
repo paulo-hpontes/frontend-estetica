@@ -41,25 +41,10 @@ const deletePayment = async (id, token) => {
   }
 };
 
-const updatePayment = async (data, id, token) => {
-  const config = requestConfig("PUT", data, token);
-  try {
-    const res = await fetch(`${api}/payment/${id}`, config)
-      .then((res) => res.json())
-      .catch((err) => err);
-
-    return res;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-
 const paymentService = {
   getAllPayment,
   paymentLink,
   deletePayment,
-  updatePayment
 };
 
 export default paymentService;

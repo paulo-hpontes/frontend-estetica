@@ -49,25 +49,6 @@ export const deletePayment = createAsyncThunk(
   }
 );
 
-export const updatePayment = createAsyncThunk(
-  "payment/update",
-  async (paymentData, thunkAPI) => {
-    const token = thunkAPI.getState().auth.user.token;
-    const status = {paymentStatus: paymentData.paymentStatus}
-    const data = await paymentService.updatePayment(
-      status,
-      paymentData.id,
-      token
-    );
-
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
-    }
-
-    return data;
-  }
-);
-
 export const paymentSlice = createSlice({
   name: "payment",
   initialState,
@@ -129,23 +110,6 @@ export const paymentSlice = createSlice({
         state.loading = false;
         state.error = true;
         state.success = false;
-        state.message = action.payload.message;
-      })
-      .addCase(updatePayment.pending, (state) => {
-        state.loading = true;
-        state.error = false;
-        state.success = false;
-      })
-      .addCase(updatePayment.fulfilled, (state,action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.payments = action.payload;
-      })
-      .addCase(updatePayment.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = true;
         state.message = action.payload.message;
       });
   },

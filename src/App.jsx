@@ -17,6 +17,7 @@ import Register from "./pages/Auth/Register";
 import Page404 from "./pages/Page404/Page404";
 import SchedSuccess from "./pages/Scheduling/SchedSuccess";
 import SchedFailure from "./pages/Scheduling/SchedFailure";
+import SchedPending from "./pages/Scheduling/SchedPending";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -33,6 +34,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/success" element={<SchedSuccess />} />
           <Route path="/failure" element={<SchedFailure />} />
+          <Route path="/pending" element={<SchedPending />} />
           <Route
             path="/login"
             element={!auth ? <Login /> : <Navigate to="/" />}

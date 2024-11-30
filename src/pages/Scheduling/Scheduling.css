@@ -38,6 +38,7 @@
   align-items: start;
   width: 100%;
   min-height: 30rem;
+  margin-bottom: 4rem;
 }
 
 
@@ -68,6 +69,10 @@
 #scheduling .rbc-toolbar-label {
   font-size: 1.4rem;
   font-weight: bold;
+}
+
+#scheduling .rbc-event-label{
+  display: none;
 }
 
 #scheduling .rbc-day-bg {
@@ -109,8 +114,13 @@
 }
 
 .personal-scheduling {
-  width: 60%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 70%;
   height: 30rem;
+  padding: 1rem;
   overflow-y: auto;
   background: linear-gradient(
     to top left,
@@ -125,27 +135,41 @@
 
 .personal-scheduling h3 {
   font-size: 1.6rem;
+  width: 100%;
+  height: 2rem;
   -webkit-text-stroke: 1px;
   -webkit-text-fill-color: #fff;
   text-shadow: -0.25rem 0.15rem #000;
-  margin: 2rem;
+  margin: 2rem auto 3rem auto;
 }
 
 .scheduling-details {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 90%;
-  height: 6rem;
-  margin: 1rem auto;
-  text-align: left;
+  width: 40%;
+  margin: 1rem;
+  min-height: 15rem;
   padding: 0.5rem;
   background-color: var(--border-color);
   border-radius: 0.5rem;
 }
 
+.scheduling-details .info{
+  line-height: 1.3rem;
+}
+
+.scheduling-details .payment{
+  margin: 1rem;
+}
+
 .scheduling-details h4 {
-  margin-bottom: .4rem;
+  margin: 1rem;
+}
+
+.scheduling-details button{
+  margin-top: 1rem;
 }
 
 .no-scheduling{

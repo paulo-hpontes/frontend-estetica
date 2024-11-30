@@ -2,6 +2,8 @@ import "./Scheduling.css";
 import { IoAddCircle, IoSettings } from "react-icons/io5";
 import { FaTrashAlt, FaCalendarAlt } from "react-icons/fa";
 
+import { v4 as uuidv4 } from "uuid";
+
 // Calendar
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -20,7 +22,7 @@ import Loading from "../../components/Loading/Loading";
 
 // Redux
 import { profile } from "../../slices/userSlice";
-import { generatePaymentLink } from "../../slices/paymentSlice";
+import { generatePaymentLink, getAllPayment } from "../../slices/paymentSlice";
 import {
   getAllDays,
   newDayOff,
@@ -28,6 +30,7 @@ import {
   reset as resetDay,
 } from "../../slices/dayOffSlice";
 import {
+  newScheduling,
   getAllScheduling,
   deleteScheduling,
   reset,
@@ -35,15 +38,23 @@ import {
 
 const Scheduling = () => {
   // redux-states
-  const { link, loading: loadingPay } = useSelector((state) => state.payment);
+  const {
+    payments,
+    link,
+    loading: loadingPay,
+  } = useSelector((state) => state.payment);
   const { user, loading: loadingUser } = useSelector((state) => state.user);
   const { user: userAuth } = useSelector((state) => state.auth);
   const { products, loading: loadingProd } = useSelector(
     (state) => state.product
   );
-  const { schedulings, loading, success, error, message } = useSelector(
-    (state) => state.scheduling
-  );
+  const {
+    schedulings,
+    loading,
+    success,
+    error: errorSched,
+    message,
+  } = useSelector((state) => state.scheduling);
   const {
     daysOff,
     error: errorDay,
@@ -74,6 +85,8 @@ const Scheduling = () => {
 
   // Scheduling filter
   const [userSched, setUserSched] = useState(null);
+  const [schedInfo, setSchedInfo] = useState("");
+  const [orderId, setOrderId] = useState("");
 
   const dateNow = momentBr().format("yyyy-MM-DD");
   const hoursNow = momentBr().format("HH:mm");
@@ -178,6 +191,7 @@ const Scheduling = () => {
     const hours = momentBr(slotInfo.start).format("HH:mm");
 
     const end = momentBr(slotInfo.start).add(1, "days");
+
     if (
       momentBr(new Date(slotInfo.end)).format("l") !==
       momentBr(new Date(end)).format("l")
@@ -216,8 +230,8 @@ const Scheduling = () => {
     resetMessage();
   };
 
-  // Payment for schedule
-  const handlePayment = (e) => {
+  // Form scheduling
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const dia = momentBr(selectedDate).format("dddd");
@@ -237,21 +251,10 @@ const Scheduling = () => {
       if (prod.serviceName === selectedService) return prod;
     });
 
-    const paymentData = {
-      id: prodInfo[0]._id,
-      unitPrice: 1,
-    };
-
-    localStorage.removeItem("scheduling");
-    handleSubmit(prodInfo);
-    dispatch(generatePaymentLink(paymentData));
-  };
-
-  // Form scheduling
-  const handleSubmit = (prodInfo) => {
+    const orderId = uuidv4();
     const dataStart = selectedDate + "T" + selectedHours;
 
-    const SchedulingData = {
+    const schedulingData = {
       title: userName,
       start: new Date(dataStart),
       end: momentBr(new Date(dataStart)).add(prodInfo[0].time, "hours"),
@@ -259,18 +262,36 @@ const Scheduling = () => {
         type: service,
         name: selectedService,
       },
+      orderId,
       userEmail: user.email,
     };
 
-    localStorage.setItem("scheduling", JSON.stringify(SchedulingData));
+    await dispatch(newScheduling(schedulingData));
+    setOrderId(orderId);
+    setSchedInfo(schedulingData.service.name);
+
     setModalOpen(false);
     setUserName("");
     setSelectedDate("");
     setSelectedHours("");
     setService("");
     setSelectedService("");
-    resetMessage();
   };
+
+  // Payment for schedule
+  useEffect(() => {
+    if (orderId && schedInfo) {
+      if (errorSched) return;
+      const paymentData = {
+        orderId,
+        description: schedInfo,
+        unitPrice: 0.1,
+      };
+
+      dispatch(generatePaymentLink(paymentData));
+      setOrderId("");
+    }
+  }, [errorSched, schedInfo, orderId, dispatch]);
 
   // Navigatr to payment link
   useEffect(() => {
@@ -280,22 +301,45 @@ const Scheduling = () => {
   // Verify if user has schedule or user is Admin
   useEffect(() => {
     if (user && schedulings) {
-      const verify = schedulings.filter((sched) => {
+      const verifySched = schedulings.filter((sched) => {
         if (user.admin || user.email === sched.userEmail) {
           return sched;
         }
       });
-      if (verify.length) {
-        setUserSched(verify);
+
+      // Sched conection with payment
+      if (payments.length && verifySched.length) {
+        const teste = verifySched.map((sched) => {
+          const payData = payments.find(
+            (pay) => pay.paymentId === sched.orderId
+          );
+          if (payData) {
+            const data = {
+              id: sched._id,
+              title: sched.title,
+              start: sched.start,
+              end: sched.end,
+              service: {
+                typeService: sched.service.typeService,
+                nameService: sched.service.nameService,
+              },
+              payment: payData.paymentStatus,
+            };
+            return data;
+          }
+          return sched;
+        });
+        setUserSched(teste);
       }
     }
-  }, [user, schedulings]);
+  }, [user, schedulings, payments]);
 
   // Organizing scheduling info for the Calendar
   useEffect(() => {
     const newEvent = schedulings.map((el) => {
       const data = {
         id: el._id,
+        title: el.service.typeService,
         start: new Date(el.start),
         end: new Date(el.end),
       };
@@ -308,6 +352,7 @@ const Scheduling = () => {
     dispatch(profile());
     dispatch(getAllScheduling());
     dispatch(getAllDays());
+    dispatch(getAllPayment());
   }, [dispatch]);
 
   if (loading || loadingUser || loadingProd || loadingDay || loadingPay) {
@@ -324,7 +369,7 @@ const Scheduling = () => {
           <Message msg={message || messageDay} type="success" />
         </small>
       )}
-      {(error || errorDay) && (
+      {(errorSched || errorDay) && (
         <small>
           <Message msg={message || messageDay} type="error" />
         </small>
@@ -363,7 +408,7 @@ const Scheduling = () => {
             selectable={true}
             onSelectSlot={handleSelectSlot}
             defaultView="month"
-            views={["month"]}
+            views={["month", "agenda"]}
             messages={{
               next: "PRÓXIMO",
               previous: "ANTERIOR",
@@ -381,34 +426,41 @@ const Scheduling = () => {
                 <h3>Meus Agendamentos</h3>
                 {userSched ? (
                   <>
-                    {userSched.map((sched) => (
-                      <div className="scheduling-details" key={sched._id}>
-                        <div>
+                    {userSched.length &&
+                      userSched.map((sched) => (
+                        <div className="scheduling-details" key={sched.id}>
                           <h4>{sched.title.toUpperCase()}</h4>
-                          <p>
-                            {sched.service.typeService}:{" "}
-                            {sched.service.nameService}
-                          </p>
+                          <div className="info">
+                            <p>
+                              {sched.service.typeService}:<br></br>
+                              {sched.service.nameService}
+                            </p>
+                            <p>Data: {momentBr(sched.start).format("L")}</p>
+                            <p>Hora: {momentBr(sched.start).format("HH:mm")}</p>
+                          </div>
+                          <div className="payment">
+                            <p>
+                              <strong>Pagamento</strong>: {sched.payment}
+                            </p>
+                          </div>
+                          <button
+                            className="btn"
+                            onClick={() => handleDelete(sched.id)}
+                          >
+                            <FaTrashAlt />
+                          </button>
                         </div>
-                        <div>
-                          <p>{momentBr(sched.start).format("L")}</p>
-                          <p>{momentBr(sched.start).fromNow()}</p>
-                        </div>
-                        <button
-                          className="btn"
-                          onClick={() => handleDelete(sched._id)}
-                        >
-                          <FaTrashAlt />
-                        </button>
-                      </div>
-                    ))}
+                      ))}
                   </>
                 ) : (
                   <div className="no-scheduling">
-                    <p> Parece que você ainda não possui nenhum agendamento registrado!</p>
+                    <p>
+                      Parece que você ainda não possui nenhum agendamento
+                      registrado!
+                    </p>
                     <FaCalendarAlt size={60} />
                     <p>
-                    Selecione uma data no calendário ou clique em &quot;Novo
+                      Selecione uma data no calendário ou clique em &quot;Novo
                       Agendamento&quot; para começar.
                     </p>
                   </div>
@@ -470,7 +522,7 @@ const Scheduling = () => {
       <Modal isOpen={modalOpen} onClose={handleCloseModal}>
         <h3 className="title-modal">NOVO AGENDAMENTO</h3>
 
-        <form className="form" onSubmit={handlePayment}>
+        <form className="form" onSubmit={handleSubmit}>
           <label>
             <span>Cliente: </span>
             <input type="text" value={userName} required disabled />

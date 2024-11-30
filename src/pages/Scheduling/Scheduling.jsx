@@ -285,7 +285,7 @@ const Scheduling = () => {
       const paymentData = {
         orderId,
         description: schedInfo,
-        unitPrice: 0.1,
+        unitPrice: 10,
       };
 
       dispatch(generatePaymentLink(paymentData));
